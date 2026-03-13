@@ -1,7 +1,19 @@
 import React from 'react';
 import { Edit3, Trash2, Users } from 'lucide-react';
 
-const DomainItemCard = ({ name, bootcamp, status, type, mentorName, mentorAvatar, studentsCount, onEdit, onDelete, onClick }) => {
+const DomainItemCard = ({ name, bootcamp, status, type, mentorName, mentorIds = [], studentsCount = 0, onEdit, onDelete, onClick }) => {
+    // Determine display name for mentor
+    let displayMentorName = 'Not Assigned';
+    let additionalMentors = 0;
+
+    if (mentorIds && mentorIds.length > 0) {
+        const firstMentor = mentorIds[0];
+        displayMentorName = firstMentor.name || firstMentor; // Handle populated or ID
+        additionalMentors = mentorIds.length - 1;
+    } else if (mentorName) {
+        displayMentorName = mentorName;
+    }
+
     return (
         <div 
             onClick={onClick}
@@ -10,9 +22,9 @@ const DomainItemCard = ({ name, bootcamp, status, type, mentorName, mentorAvatar
             <div className="flex justify-between items-start mb-4">
                 <div>
                     <h3 className="text-lg font-bold text-slate-900">{name}</h3>
-                    <p className="text-xs text-slate-500 font-medium">{bootcamp} • {status}</p>
+                    <p className="text-xs text-slate-500 font-medium">{bootcamp?.name || bootcamp} • {status}</p>
                 </div>
-                <span className={`text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider ${type === 'Core Track' ? 'bg-[#1111d4]/10 text-[#1111d4]' : 'bg-slate-100 text-slate-500'
+                <span className={`text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase tracking-wider ${type === 'Core Track' ? 'bg-[#1111d4]/10 text-[#1111d4]' : 'bg-slate-100 text-slate-500'
                     }`}>
                     {type}
                 </span>
@@ -21,25 +33,16 @@ const DomainItemCard = ({ name, bootcamp, status, type, mentorName, mentorAvatar
             <div className="flex items-center justify-between mt-6">
                 <div className="flex items-center gap-3">
                     <div className="size-10 rounded-full border-2 border-[#1111d4]/20 overflow-hidden bg-[#1111d4]/5 flex items-center justify-center shrink-0">
-                        {mentorAvatar && !mentorAvatar.includes('placeholder') ? (
-                            <img
-                                className="h-full w-full object-cover"
-                                src={mentorAvatar}
-                                alt={`Avatar of mentor ${mentorName}`}
-                                onError={(e) => {
-                                    e.target.onerror = null; // Prevent infinite loop
-                                    e.target.style.display = 'none';
-                                    e.target.nextSibling.style.display = 'flex';
-                                }}
-                            />
-                        ) : null}
-                        <span className={`text-[#1111d4] font-bold text-sm uppercase ${mentorAvatar && !mentorAvatar.includes('placeholder') ? 'hidden' : 'flex'}`}>
-                            {mentorName ? mentorName.charAt(0) : 'M'}
+                        <span className="text-[#1111d4] font-bold text-sm uppercase">
+                            {displayMentorName.charAt(0)}
                         </span>
                     </div>
                     <div>
-                        <p className="text-xs text-slate-400 font-medium">Assigned Mentor</p>
-                        <p className="text-sm font-semibold text-slate-700">{mentorName}</p>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Assigned Mentors</p>
+                        <p className="text-sm font-bold text-slate-700">
+                            {displayMentorName}
+                            {additionalMentors > 0 && <span className="ml-1 text-[#1111d4]">+{additionalMentors} more</span>}
+                        </p>
                     </div>
                 </div>
 

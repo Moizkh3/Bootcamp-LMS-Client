@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BASE_URL } from '../../utils/constants';
+import { bootcampApi } from '../bootcamp/bootcampApi';
 
 export const domainApi = createApi({
     reducerPath: 'domainApi',
@@ -23,6 +24,12 @@ export const domainApi = createApi({
                 body: newDomain,
             }),
             invalidatesTags: ['Domain'],
+            async onQueryStarted(args, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(bootcampApi.util.invalidateTags(['Bootcamp']));
+                } catch (err) { }
+            },
         }),
 
         // 3. Edit Domain
@@ -33,6 +40,12 @@ export const domainApi = createApi({
                 body: updatedDomain,
             }),
             invalidatesTags: ['Domain'],
+            async onQueryStarted(args, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(bootcampApi.util.invalidateTags(['Bootcamp']));
+                } catch (err) { }
+            },
         }),
 
         // 4. Get Domain by ID
@@ -48,6 +61,12 @@ export const domainApi = createApi({
                 method: 'DELETE',
             }),
             invalidatesTags: ['Domain'],
+            async onQueryStarted(args, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(bootcampApi.util.invalidateTags(['Bootcamp']));
+                } catch (err) { }
+            },
         }),
     }),
 });

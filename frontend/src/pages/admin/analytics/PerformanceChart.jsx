@@ -5,19 +5,46 @@ const PerformanceChart = () => {
     const { data: submissionsResponse, isLoading } = useGetAllSubmissionsQuery({ limit: 100 });
     const submissions = submissionsResponse?.submissions || [];
 
-    // Mock data based on real submission counts if data is loaded, otherwise defaults
+    // Aggregation logic for the chart to show real trends
     const getChartData = () => {
-        if (isLoading || submissions.length === 0) {
-            return [45, 30, 56, 40, 67, 45, 75, 50, 60, 45];
+        if (isLoading) return new Array(10).fill(0);
+        
+        // Define the time range (last 10 days)
+        const dayBuckets = [];
+        const today = new Date();
+        today.setHours(23, 59, 59, 999);
+        
+        for (let i = 9; i >= 0; i--) {
+            const date = new Date(today);
+            date.setDate(today.getDate() - i);
+            date.setHours(0, 0, 0, 0);
+            dayBuckets.push({
+                date,
+                count: 0,
+                label: date.toLocaleDateString('en-US', { weekday: 'short' })
+            });
         }
 
-        // Distribute real submissions into 10 buckets (simulating weeks/days)
-        const buckets = new Array(10).fill(0);
-        submissions.forEach((s, idx) => {
-            buckets[idx % 10] += 5; // Simple visualization logic
+        // Fill buckets with real submission counts
+        submissions.forEach(sub => {
+            const subDate = new Date(sub.createdAt);
+            const bucketIndex = dayBuckets.findIndex(bucket => 
+                subDate.getDate() === bucket.date.getDate() &&
+                subDate.getMonth() === bucket.date.getMonth() &&
+                subDate.getFullYear() === bucket.date.getFullYear()
+            );
+            if (bucketIndex !== -1) {
+                dayBuckets[bucketIndex].count += 1;
+            }
         });
 
-        return buckets.map(v => Math.min(100, 30 + v));
+        // Normalize data to percentages for visual height (0-100%)
+        const maxCount = Math.max(...dayBuckets.map(b => b.count), 5); // Minimum max of 5 for scaling
+        return dayBuckets.map(bucket => ({
+            value: (bucket.count / maxCount) * 100,
+            count: bucket.count,
+            label: bucket.label
+        }));
     };
 
     const chartData = getChartData();
@@ -41,25 +68,30 @@ const PerformanceChart = () => {
 
             {/* Visual Placeholder for Chart */}
             <div className="h-48 w-full flex items-end justify-between gap-2 px-2 pb-2 border-b border-l border-slate-100">
-                {chartData.map((val, i) => (
-                    <div key={i} className="flex-1 flex flex-col items-center gap-2 group relative">
+                {chartData.length > 0 ? chartData.map((item, i) => (
+                    <div key={i} className="flex-1 flex flex-col items-center gap-2 group relative h-full justify-end">
                         <div
-                            className="w-full bg-[#3636e2]/10 group-hover:bg-[#3636e2]/20 transition-all rounded-t-sm relative"
-                            style={{ height: `${val}%` }}
+                            className="w-full bg-[#3636e2]/10 group-hover:bg-[#3636e2]/20 transition-all rounded-t-sm relative flex flex-col justify-end"
+                            style={{ height: `${Math.max(item.value, 5)}%` }}
                         >
                             <div
-                                className="absolute bottom-0 left-0 right-0 bg-[#3636e2] rounded-t-sm"
-                                style={{ height: '40%' }}
+                                className="w-full bg-[#3636e2] rounded-t-sm transition-all duration-500"
+                                style={{ height: item.count > 0 ? '100%' : '0%' }}
                             />
                         </div>
-                        <span className="text-[8px] font-bold text-slate-300">W{i + 1}</span>
+                        <span className="text-[8px] font-bold text-slate-300 uppercase">{item.label}</span>
 
                         {/* Tooltip */}
-                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[8px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
-                            {val}% Engaged
+                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1.5 px-3 rounded-lg opacity-0 group-hover:opacity-100 transition-all transform scale-95 group-hover:scale-100 pointer-events-none whitespace-nowrap z-10 shadow-xl border border-white/10">
+                            <div className="font-bold">{item.count} Submissions</div>
+                            <div className="text-[8px] text-slate-400">{item.label}</div>
                         </div>
                     </div>
-                ))}
+                )) : (
+                    <div className="w-full h-full flex items-center justify-center text-slate-300 text-[10px] italic">
+                        No activity data found
+                    </div>
+                )}
             </div>
 
             <div className="mt-4 flex justify-between">

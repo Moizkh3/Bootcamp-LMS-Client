@@ -203,7 +203,7 @@ const BulkUploadModal = ({ isOpen, onClose, bootcampId: initialBootcampId }) => 
                 {/* Info Note */}
                 <div className="flex items-start gap-2 text-[11px] text-[var(--color-text-muted)] font-medium bg-[var(--color-surface-alt)] rounded-lg p-3">
                     <CheckCircle2 size={14} className="text-[var(--color-primary)] shrink-0 mt-0.5" />
-                    Each student will receive a welcome email with their login credentials. Default password: <strong>BMS@2024</strong>.
+                    Each student will receive a welcome email with their login credentials to access the platform.
                 </div>
 
                 {/* Actions */}

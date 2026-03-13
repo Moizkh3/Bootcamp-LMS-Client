@@ -119,10 +119,6 @@ export default function BootcampList() {
                     ]}
                 />
 
-                <button className="flex items-center gap-2 h-11 px-4 text-[#64748b] font-medium border border-[#e2e8f0] rounded-lg hover:bg-[#f1f5f9] transition-colors shrink-0">
-                    <Filter size={18} />
-                    More Filters
-                </button>
             </div>
 
             {/* Table Area */}

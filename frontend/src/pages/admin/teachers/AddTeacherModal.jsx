@@ -147,12 +147,7 @@ const AddTeacherModal = ({ isOpen, onClose, bootcampId }) => {
                     </div>
                 </div>
 
-                <div className="p-4 bg-blue-50/50 rounded-xl border border-blue-100 flex gap-3">
-                    <CheckCircle2 size={18} className="text-blue-500 shrink-0 mt-0.5" />
-                    <p className="text-[11px] text-slate-600 font-medium leading-relaxed">
-                        Teacher will be registered with default password <span className="font-bold">BMS@2024</span>. They should change it upon first login.
-                    </p>
-                </div>
+
 
                 <div className="flex gap-3 pt-6 border-t border-slate-100">
                     <Button

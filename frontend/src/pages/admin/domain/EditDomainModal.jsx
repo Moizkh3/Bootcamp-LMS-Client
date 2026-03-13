@@ -16,18 +16,27 @@ const EditDomainModal = ({ isOpen, onClose, onSave, domainData }) => {
 
     const [formData, setFormData] = useState({
         name: '',
-        bootcamp: '',
         status: '',
         type: '',
-        mentorName: '',
-        studentsCount: 0
+        mentorIds: [],
     });
-
-
 
     useEffect(() => {
         if (domainData) {
-            setFormData(domainData);
+            // Normalize mentorIds to be an array of IDs (strings)
+            const normalizedMentorIds = (domainData.mentorIds || []).map(m => 
+                typeof m === 'object' ? m._id : m
+            );
+
+            // Handle legacy mentorId if mentorIds is empty
+            if (normalizedMentorIds.length === 0 && domainData.mentorId) {
+                normalizedMentorIds.push(domainData.mentorId);
+            }
+
+            setFormData({
+                ...domainData,
+                mentorIds: normalizedMentorIds
+            });
         }
     }, [domainData]);
 
@@ -35,6 +44,15 @@ const EditDomainModal = ({ isOpen, onClose, onSave, domainData }) => {
         e.preventDefault();
         onSave(formData);
         onClose();
+    };
+
+    const toggleMentor = (teacherId) => {
+        setFormData(prev => ({
+            ...prev,
+            mentorIds: prev.mentorIds.includes(teacherId)
+                ? prev.mentorIds.filter(id => id !== teacherId)
+                : [...prev.mentorIds, teacherId]
+        }));
     };
 
     return (
@@ -77,16 +95,31 @@ const EditDomainModal = ({ isOpen, onClose, onSave, domainData }) => {
                     />
                 </div>
 
-                <Select
-                    label="Lead Mentor"
-                    placeholder="Select a mentor"
-                    value={formData.mentorName}
-                    onChange={(e) => setFormData({ ...formData, mentorName: e.target.value })}
-                    options={teachers.map(t => ({
-                        label: t.name,
-                        value: t.name
-                    }))}
-                />
+                <div className="space-y-3">
+                    <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider">
+                        Assigned Mentors
+                    </label>
+                    <div className="flex flex-wrap gap-2 min-h-[44px] p-3 bg-[var(--color-surface-alt)] rounded-xl border border-[var(--color-border)]">
+                        {teachers.length > 0 ? (
+                            teachers.map(teacher => (
+                                <button
+                                    key={teacher._id}
+                                    type="button"
+                                    onClick={() => toggleMentor(teacher._id)}
+                                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
+                                        formData.mentorIds?.includes(teacher._id)
+                                            ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)] shadow-sm'
+                                            : 'bg-white text-[var(--color-text-muted)] border-[var(--color-border)] hover:border-[var(--color-primary)]/30'
+                                    }`}
+                                >
+                                    {teacher.name}
+                                </button>
+                            ))
+                        ) : (
+                            <p className="text-[10px] text-[var(--color-text-muted)] italic">No teachers available</p>
+                        )}
+                    </div>
+                </div>
 
 
 

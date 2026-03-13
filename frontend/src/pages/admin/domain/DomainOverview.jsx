@@ -155,19 +155,44 @@ const DomainOverview = () => {
                 />
             </div>
 
-            {/* Mentor Card */}
-            {domain.mentorName && (
-                <div className="bg-white border border-[var(--color-border)] rounded-2xl p-5 mb-8 flex items-center gap-4 shadow-sm">
-                    <div className="w-14 h-14 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] flex items-center justify-center font-black text-xl shrink-0">
-                        {domain.mentorAvatar && !domain.mentorAvatar.includes('placeholder') ? (
-                            <img src={domain.mentorAvatar} alt={domain.mentorName} className="w-full h-full object-cover rounded-full" />
+            {/* Mentors Section */}
+            {(domain.mentorIds?.length > 0 || domain.mentorName) && (
+                <div className="mb-8">
+                    <h3 className="text-sm font-bold text-[var(--color-text-muted)] uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <Shield size={16} /> Assigned Mentors
+                    </h3>
+                    <div className="flex flex-wrap gap-4">
+                        {domain.mentorIds?.length > 0 ? (
+                            domain.mentorIds.map((mentor, index) => {
+                                const mName = mentor.name || mentor;
+                                const mAvatar = mentor.avatar;
+                                return (
+                                    <div key={mentor._id || index} className="bg-white border border-[var(--color-border)] rounded-2xl p-4 flex items-center gap-4 shadow-sm min-w-[240px]">
+                                        <div className="w-12 h-12 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] flex items-center justify-center font-black text-lg shrink-0">
+                                            {mAvatar && !mAvatar.includes('placeholder') ? (
+                                                <img src={mAvatar} alt={mName} className="w-full h-full object-cover rounded-full" />
+                                            ) : (
+                                                mName.charAt(0).toUpperCase()
+                                            )}
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest">Mentor</p>
+                                            <p className="text-base font-bold text-[var(--color-text-main)] mt-0.5">{mName}</p>
+                                        </div>
+                                    </div>
+                                );
+                            })
                         ) : (
-                            domain.mentorName.charAt(0).toUpperCase()
+                            <div className="bg-white border border-[var(--color-border)] rounded-2xl p-4 flex items-center gap-4 shadow-sm min-w-[240px]">
+                                <div className="w-12 h-12 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] flex items-center justify-center font-black text-lg shrink-0">
+                                    {domain.mentorName.charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                    <p className="text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest">Mentor</p>
+                                    <p className="text-base font-bold text-[var(--color-text-main)] mt-0.5">{domain.mentorName}</p>
+                                </div>
+                            </div>
                         )}
-                    </div>
-                    <div>
-                        <p className="text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest">Assigned Mentor</p>
-                        <p className="text-lg font-bold text-[var(--color-text-main)] mt-0.5">{domain.mentorName}</p>
                     </div>
                 </div>
             )}
