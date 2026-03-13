@@ -11,13 +11,6 @@ const QuickAddModal = ({ isOpen, onClose, onAdd }) => {
     const bootcamps = bootcampsResponse?.data || [];
 
     const [domainName, setDomainName] = useState('');
-    const [bootcamp, setBootcamp] = useState('');
-
-    useEffect(() => {
-        if (bootcamps.length > 0 && !bootcamp) {
-            setBootcamp(bootcamps[0].name);
-        }
-    }, [bootcamps, bootcamp]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -25,7 +18,6 @@ const QuickAddModal = ({ isOpen, onClose, onAdd }) => {
 
         onAdd({
             name: domainName,
-            bootcamp: bootcamp,
             status: 'Active',
             type: 'Core Track',
             mentorName: 'TBD',
@@ -52,16 +44,6 @@ const QuickAddModal = ({ isOpen, onClose, onAdd }) => {
                     placeholder="e.g. Cloud Architecture"
                     value={domainName}
                     onChange={(e) => setDomainName(e.target.value)}
-                />
-
-                <Select
-                    label="Select Bootcamp"
-                    value={bootcamp}
-                    onChange={(e) => setBootcamp(e.target.value)}
-                    options={bootcamps.map(b => ({
-                        label: b.name,
-                        value: b.name
-                    }))}
                 />
 
                 <div className="pt-2 flex gap-3">

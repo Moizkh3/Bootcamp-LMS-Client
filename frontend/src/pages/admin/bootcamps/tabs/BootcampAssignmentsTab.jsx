@@ -90,6 +90,7 @@ export default function BootcampAssignmentsTab({ bootcampId }) {
                 onAdd={handleCreate}
                 onUpdate={handleUpdate}
                 assignment={selectedAssignment}
+                bootcampId={bootcampId}
             />
 
             <div className="bg-white border border-[#e2e8f0] rounded-xl overflow-hidden shadow-sm">

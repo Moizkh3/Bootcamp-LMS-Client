@@ -4,31 +4,51 @@ import Modal from '../../../components/common/Modal';
 import Input from '../../../components/common/Input';
 import Select from '../../../components/common/Select';
 import Button from '../../../components/common/Button';
-import { useGetAllBootcampsQuery } from '../../../features/bootcamp/bootcampApi';
+import { useGetAllBootcampsQuery, useGetBootcampByIdQuery } from '../../../features/bootcamp/bootcampApi';
 import { useGetAllDomainsQuery } from '../../../features/domain/domainApi';
 import { useRegisterMutation } from '../../../features/auth/authServiceApi';
 import { toast } from 'react-hot-toast';
 
-const AddStudentModal = ({ isOpen, onClose }) => {
+const AddStudentModal = ({ isOpen, onClose, bootcampId }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
-        studentBootcampId: '',
+        studentBootcampId: bootcampId || '',
         domainId: ''
     });
 
+    React.useEffect(() => {
+        if (isOpen) {
+            setFormData({
+                name: '',
+                email: '',
+                studentBootcampId: bootcampId || '',
+                domainId: ''
+            });
+        }
+    }, [isOpen, bootcampId]);
+
     const { data: bootcampsResponse } = useGetAllBootcampsQuery({});
-    const { data: domainsResponse } = useGetAllDomainsQuery();
+    const { data: domainsResponse } = useGetAllDomainsQuery({ skip: !!bootcampId });
+    const { data: bootcampDataResponse } = useGetBootcampByIdQuery(bootcampId || '', { skip: !bootcampId });
     const [register, { isLoading: isRegistering }] = useRegisterMutation();
 
     const bootcamps = bootcampsResponse?.data || [];
-    const domains = domainsResponse?.data || [];
+    const allDomains = domainsResponse?.data || [];
+    
+    const relevantDomains = bootcampId ? (bootcampDataResponse?.data?.domains || []) : allDomains;
+
+    React.useEffect(() => {
+        if (relevantDomains.length === 1 && !formData.domainId) {
+            setFormData(prev => ({ ...prev, domainId: relevantDomains[0]._id }));
+        }
+    }, [relevantDomains, formData.domainId]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             await register({ ...formData, role: 'student' }).unwrap();
-            toast.success('Student registered successfully! Default password: BMS@2024');
+            toast.success('Student registered successfully! Credentials have been sent to their email.');
             onClose();
             setFormData({ name: '', email: '', studentBootcampId: '', domainId: '' });
         } catch (err) {
@@ -64,7 +84,8 @@ const AddStudentModal = ({ isOpen, onClose }) => {
                 </div>
 
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className={`grid grid-cols-1 ${bootcampId ? '' : 'md:grid-cols-2'} gap-5`}>
+                    {!bootcampId && (
                     <Select
                         label="Target Bootcamp"
                         placeholder="Select bootcamp"
@@ -73,21 +94,22 @@ const AddStudentModal = ({ isOpen, onClose }) => {
                         onChange={(e) => setFormData({ ...formData, studentBootcampId: e.target.value })}
                         options={bootcamps.map(bc => ({ value: bc._id, label: bc.name }))}
                     />
-                    <Select
-                        label="Assigned Domain"
-                        placeholder="Select domain"
-                        required
-                        value={formData.domainId}
-                        onChange={(e) => setFormData({ ...formData, domainId: e.target.value })}
-                        options={domains.map(d => ({ value: d._id, label: d.name }))}
-                    />
+                    )}
+                    {relevantDomains.length !== 1 && (
+                        <Select
+                            label="Assigned Domain"
+                            placeholder="Select domain"
+                            required
+                            value={formData.domainId}
+                            onChange={(e) => setFormData({ ...formData, domainId: e.target.value })}
+                            options={relevantDomains.map(d => ({ value: d._id, label: d.name }))}
+                        />
+                    )}
                 </div>
 
-                <div className="p-4 bg-[var(--color-primary-muted)]/30 rounded-xl border border-[var(--color-primary)]/10 flex gap-3">
-                    <CheckCircle2 size={18} className="text-[var(--color-primary)] shrink-0 mt-0.5" />
-                    <p className="text-[11px] text-[var(--color-text-muted)] font-medium leading-relaxed">
-                        Student will be registered with default password <span className="font-bold">BMS@2024</span>. They should change it upon first login.
-                    </p>
+                <div className="flex items-start gap-2 text-[11px] text-[var(--color-text-muted)] font-medium bg-[var(--color-surface-alt)] rounded-lg p-3">
+                    <CheckCircle2 size={14} className="text-[var(--color-primary)] shrink-0 mt-0.5" />
+                    Each student will receive a welcome email with their login credentials and a unique secure password.
                 </div>
 
 

@@ -58,7 +58,6 @@ export default function TeacherProfile() {
         standups: true,
         reports: false,
     });
-    const fileInputRef = useRef(null);
     const { data: teacherStats, isLoading: isStatsLoading } = useGetTeacherStatsQuery();
     const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation();
     const { data: notificationData } = useGetNotificationsQuery();
@@ -70,18 +69,15 @@ export default function TeacherProfile() {
         { label: 'Graded Assignments', value: teacherStats?.data?.gradedSubmissionsCount ?? '0', icon: Award, color: '#7c3aed' },
     ];
 
-    const recentActivity = notificationData?.data?.slice(0, 5).map(n => ({
-        message: n.message,
-        time: new Date(n.createdAt).toLocaleDateString(),
-    })) || [];
+    const recentActivity = notificationData?.data?.slice(0, 5).map(n => {
+        const dateObj = new Date(n.createdAt || n.time);
+        return {
+            message: n.message,
+            time: isNaN(dateObj.getTime()) ? 'Just now' : dateObj.toLocaleDateString(),
+        };
+    }) || [];
 
-    const handleAvatarChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const url = URL.createObjectURL(file);
-            setForm(prev => ({ ...prev, avatar: url }));
-        }
-    };
+
 
     const toggleNotif = (key) => setNotifications(prev => ({ ...prev, [key]: !prev[key] }));
 
@@ -140,12 +136,6 @@ export default function TeacherProfile() {
                 <div className="absolute left-6 -bottom-10 flex items-end gap-4">
                     <div className="relative">
                         <img src={form.avatar} alt={form.name} className="w-20 h-20 rounded-2xl object-cover border-4 border-white shadow-xl" onError={e => { e.target.src = DEFAULT_AVATAR; }} />
-                        {isEditing && (
-                            <button type="button" onClick={() => fileInputRef.current.click()} className="absolute -bottom-1.5 -right-1.5 w-7 h-7 bg-[var(--color-primary)] text-white rounded-lg flex items-center justify-center shadow-lg hover:bg-[var(--color-primary-soft)] transition-all hover:scale-110 active:scale-95 border-2 border-white">
-                                <Camera size={14} />
-                            </button>
-                        )}
-                        <input ref={fileInputRef} type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" />
                     </div>
                 </div>
             </div>

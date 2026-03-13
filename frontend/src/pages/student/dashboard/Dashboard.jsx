@@ -136,7 +136,7 @@ export default function StudentDashboard() {
           {!isStandupSubmitted && (
             <Button
               onClick={() => navigate("/student/progress")}
-              className="bg-white text-[var(--color-primary)] hover:scale-105 transition-all shadow-lg hover:shadow-white/20 px-8 py-3 w-fit mt-8 border-none"
+              className="bg-white text-[var(--color-primary)] hover:bg-slate-50 hover:scale-105 transition-all shadow-lg hover:shadow-white/20 px-8 py-3 w-fit mt-8 border-none"
             >
               Submit Now
             </Button>

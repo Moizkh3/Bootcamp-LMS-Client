@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MoreVertical, UserX, UserMinus, Pencil, UserCircle } from 'lucide-react';
+import { MoreVertical, UserX, UserMinus, Pencil, UserCircle, KeyRound } from 'lucide-react';
 
-const StudentRow = ({ _id: id, name, email, studentStatus: status, studentBootcampId: bootcamp, domainId: domain, createdAt, onEdit, onToggleStatus, onDelete }) => {
+const StudentRow = ({ _id: id, name, email, studentStatus: status, studentBootcampId: bootcamp, domainId: domain, createdAt, onEdit, onToggleStatus, onDelete, onResetPassword }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef(null);
 
@@ -86,6 +86,13 @@ const StudentRow = ({ _id: id, name, email, studentStatus: status, studentBootca
                                         Suspend
                                     </>
                                 )}
+                            </button>
+                            <button
+                                onClick={() => { onResetPassword && onResetPassword(); setIsMenuOpen(false); }}
+                                className="w-full px-4 py-2 flex items-center gap-3 text-xs font-bold text-amber-600 hover:bg-amber-50 transition-colors"
+                            >
+                                <KeyRound size={14} />
+                                Reset Password
                             </button>
                             <div className="my-1 border-t border-slate-100"></div>
                             <button

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Pencil, X, Upload, CheckCircle2, Camera, User } from 'lucide-react';
+import { Pencil, X, CheckCircle2 } from 'lucide-react';
 import Modal from '../../../components/common/Modal';
 import Input from '../../../components/common/Input';
 import Select from '../../../components/common/Select';
@@ -23,13 +23,7 @@ const EditStudentModal = ({ isOpen, onClose, onSave, student }) => {
     const bootcamps = bootcampsResponse?.data || [];
     const domains = domainsResponse?.data || [];
 
-    const handleAvatarChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const url = URL.createObjectURL(file);
-            setFormData(prev => ({ ...prev, avatar: url }));
-        }
-    };
+
 
     useEffect(() => {
         if (student) {

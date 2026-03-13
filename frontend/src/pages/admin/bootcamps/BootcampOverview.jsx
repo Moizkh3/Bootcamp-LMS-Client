@@ -14,7 +14,11 @@ import Breadcrumbs from '../../../components/common/Breadcrumbs';
 import Button from '../../../components/common/Button';
 import EditBootcampModal from './EditBootcampModal';
 import DeleteConfirmationModal from '../../../components/common/DeleteConfirmationModal';
-import { useGetBootcampByIdQuery } from '../../../features/bootcamp/bootcampApi';
+import { 
+    useGetBootcampByIdQuery, 
+    useEditBootcampMutation 
+} from '../../../features/bootcamp/bootcampApi';
+import toast from 'react-hot-toast';
 
 // Import Tab Components
 import BootcampOverviewTab from './tabs/BootcampOverviewTab';
@@ -24,6 +28,7 @@ import BootcampDomainsTab from './tabs/BootcampDomainsTab';
 import BootcampAssignmentsTab from './tabs/BootcampAssignmentsTab';
 import BootcampAnnouncementsTab from './tabs/BootcampAnnouncementsTab';
 import BootcampProgressTab from './tabs/BootcampProgressTab';
+import BootcampStandupsTab from './tabs/BootcampStandupsTab';
 
 // Mock data removed
 
@@ -32,6 +37,7 @@ export default function BootcampOverview() {
     const navigate = useNavigate();
 
     const { data: bootcampResponse, isLoading, error } = useGetBootcampByIdQuery(id);
+    const [editBootcamp] = useEditBootcampMutation();
     const bootcamp = bootcampResponse?.data;
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -48,6 +54,7 @@ export default function BootcampOverview() {
         { id: 'students', label: 'Students' },
         { id: 'assignments', label: 'Assignments' },
         { id: 'announcements', label: 'Announcements' },
+        { id: 'standups', label: 'Standups' },
         { id: 'progress', label: 'Progress' }
     ];
 
@@ -66,8 +73,13 @@ export default function BootcampOverview() {
         );
     }
 
-    const handleUpdate = (updatedData) => {
-        setBootcamp({ ...bootcamp, ...updatedData });
+    const handleUpdate = async (updatedData) => {
+        try {
+            await editBootcamp({ id, ...updatedData }).unwrap();
+            toast.success('Bootcamp updated successfully');
+        } catch (err) {
+            toast.error(err.data?.message || 'Failed to update bootcamp');
+        }
     };
 
     const handleConfirmDelete = () => {
@@ -122,6 +134,14 @@ export default function BootcampOverview() {
                                 {bootcamp.status}
                             </span>
                         </div>
+                        <div className="flex items-center gap-4 mt-2">
+                            <div className="flex items-center gap-1.5 text-xs font-medium text-slate-500 bg-white px-2 py-1 rounded-md border border-slate-100 shadow-sm">
+                                <Calendar size={14} className="text-[#1111d4]" />
+                                <span>{new Date(bootcamp.startDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                                <span className="text-slate-300 mx-0.5">→</span>
+                                <span>{new Date(bootcamp.endDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -169,8 +189,9 @@ export default function BootcampOverview() {
                 {activeTab === 'domains' && <BootcampDomainsTab bootcamp={bootcamp} />}
                 {activeTab === 'mentors' && <BootcampMentorsTab bootcampId={bootcamp._id} />}
                 {activeTab === 'students' && <BootcampStudentsTab bootcampId={bootcamp._id} />}
-                {activeTab === 'assignments' && <BootcampAssignmentsTab bootcampId={bootcamp._id} />}
+                { activeTab === 'assignments' && <BootcampAssignmentsTab bootcampId={bootcamp._id} /> }
                 {activeTab === 'announcements' && <BootcampAnnouncementsTab bootcampId={bootcamp._id} />}
+                {activeTab === 'standups' && <BootcampStandupsTab bootcampId={bootcamp._id} />}
                 {activeTab === 'progress' && <BootcampProgressTab bootcampId={bootcamp._id} />}
             </div>
 

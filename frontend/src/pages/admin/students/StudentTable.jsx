@@ -4,10 +4,12 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import EditStudentModal from './EditStudentModal';
 import DeleteConfirmationModal from '../../../components/common/DeleteConfirmationModal';
 import Breadcrumbs from '../../../components/common/Breadcrumbs';
+import ResetPasswordModal from '../../../components/common/ResetPasswordModal';
 
 const StudentTable = ({ students, onUpdate, onDelete, onToggleStatus }) => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
@@ -24,6 +26,11 @@ const StudentTable = ({ students, onUpdate, onDelete, onToggleStatus }) => {
     const handleDeleteClick = (student) => {
         setSelectedStudent(student);
         setIsDeleteModalOpen(true);
+    };
+
+    const handleResetPassword = (student) => {
+        setSelectedStudent(student);
+        setIsResetPasswordModalOpen(true);
     };
 
     const handleConfirmDelete = async () => {
@@ -57,6 +64,7 @@ const StudentTable = ({ students, onUpdate, onDelete, onToggleStatus }) => {
                                 onEdit={() => handleEdit(student)}
                                 onToggleStatus={(currentStatus) => onToggleStatus(student._id, currentStatus)}
                                 onDelete={() => handleDeleteClick(student)}
+                                onResetPassword={() => handleResetPassword(student)}
                             />
                         ))}
                     </tbody>
@@ -82,6 +90,12 @@ const StudentTable = ({ students, onUpdate, onDelete, onToggleStatus }) => {
                     </button>
                 </div>
             </div>
+
+            <ResetPasswordModal
+                isOpen={isResetPasswordModalOpen}
+                onClose={() => setIsResetPasswordModalOpen(false)}
+                user={selectedStudent}
+            />
 
             {/* Edit Modal */}
             <EditStudentModal

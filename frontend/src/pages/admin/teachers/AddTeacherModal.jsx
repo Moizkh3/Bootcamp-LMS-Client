@@ -9,13 +9,24 @@ import { useGetAllDomainsQuery } from '../../../features/domain/domainApi';
 import { useRegisterMutation } from '../../../features/auth/authServiceApi';
 import { toast } from 'react-hot-toast';
 
-const AddTeacherModal = ({ isOpen, onClose }) => {
+const AddTeacherModal = ({ isOpen, onClose, bootcampId }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
-        teacherBootcampIds: [],
+        teacherBootcampIds: bootcampId ? [bootcampId] : [],
         teacherDomainIds: []
     });
+
+    React.useEffect(() => {
+        if (isOpen) {
+            setFormData({
+                name: '',
+                email: '',
+                teacherBootcampIds: bootcampId ? [bootcampId] : [],
+                teacherDomainIds: []
+            });
+        }
+    }, [isOpen, bootcampId]);
 
     const { data: bootcampsResponse, isLoading: bootcampsLoading, error: bootcampsError } = useGetAllBootcampsQuery({ status: 'active' });
     const { data: domainsResponse, isLoading: domainsLoading, error: domainsError } = useGetAllDomainsQuery();
@@ -86,7 +97,7 @@ const AddTeacherModal = ({ isOpen, onClose }) => {
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     />
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className={`grid grid-cols-1 ${bootcampId ? '' : 'md:grid-cols-2'} gap-4`}>
                         <div className="space-y-1.5">
                             <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider">
                                 Assigned Domains (Ctrl+Click)
@@ -108,6 +119,7 @@ const AddTeacherModal = ({ isOpen, onClose }) => {
                             {domainsLoading && <div className="flex items-center gap-2 text-[10px] text-blue-500 font-bold uppercase"><Loader2 size={12} className="animate-spin" /> Fetching domains...</div>}
                         </div>
 
+                        {!bootcampId && (
                         <div className="space-y-1.5">
                             <label className="block text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider">
                                 Assigned Bootcamps (Ctrl+Click to select multiple)
@@ -131,6 +143,7 @@ const AddTeacherModal = ({ isOpen, onClose }) => {
                             </select>
                             {bootcampsLoading && <div className="flex items-center gap-2 text-[10px] text-blue-500 font-bold uppercase"><Loader2 size={12} className="animate-spin" /> Fetching bootcamps...</div>}
                         </div>
+                        )}
                     </div>
                 </div>
 

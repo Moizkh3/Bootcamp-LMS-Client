@@ -12,7 +12,7 @@ import {
 import { useGetAllDomainsQuery } from '../../../features/domain/domainApi';
 import { toast } from 'react-hot-toast';
 
-const CreateAssignmentModal = ({ isOpen, onClose, assignment }) => {
+const CreateAssignmentModal = ({ isOpen, onClose, assignment, bootcampId }) => {
     const [createAssignment, { isLoading: isCreating }] = useCreateTeacherAssignmentMutation();
     const [updateAssignment, { isLoading: isUpdating }] = useUpdateTeacherAssignmentMutation();
     const { data: domainsData } = useGetAllDomainsQuery();
@@ -52,7 +52,7 @@ const CreateAssignmentModal = ({ isOpen, onClose, assignment }) => {
                 title: '',
                 description: '',
                 domain: domains.length > 0 ? domains[0]._id : '',
-                bootcamp: activeBootcamps.length > 0 ? activeBootcamps[0]._id : '',
+                bootcamp: bootcampId || (activeBootcamps.length > 0 ? activeBootcamps[0]._id : ''),
                 deadline: '',
                 module: '',
                 status: 'Active',
@@ -60,7 +60,7 @@ const CreateAssignmentModal = ({ isOpen, onClose, assignment }) => {
             });
             setFile(null);
         }
-    }, [assignment, isOpen, domains, activeBootcamps]);
+    }, [assignment, isOpen, domains, activeBootcamps, bootcampId]);
 
     if (!isOpen) return null;
 
@@ -177,6 +177,7 @@ const CreateAssignmentModal = ({ isOpen, onClose, assignment }) => {
                     />
 
                     {/* Bootcamp Select */}
+                    {!bootcampId && (
                     <Select
                         label={
                             <span className="flex items-center gap-2">
@@ -189,6 +190,7 @@ const CreateAssignmentModal = ({ isOpen, onClose, assignment }) => {
                         options={activeBootcamps.map(b => ({ value: b._id, label: b.name }))}
                         disabled={isLoading}
                     />
+                    )}
                 </div>
 
                 {/* Deadline Date */}

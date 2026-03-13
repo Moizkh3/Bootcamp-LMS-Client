@@ -17,7 +17,6 @@ export default function StudentProfile() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [saved, setSaved] = useState(false);
-  const fileInputRef = useRef(null);
   const [triggerLogout] = useLazyLogoutUserQuery();
 
   const { data: studentStats } = useGetStudentStatsQuery();
@@ -30,10 +29,13 @@ export default function StudentProfile() {
     { label: "Assignments", value: studentStats?.assignmentsCompleted || "0", icon: CheckIcon, color: "var(--color-warning)" },
   ];
 
-  const recentActivity = notificationData?.data?.slice(0, 5).map(n => ({
-    message: n.message,
-    time: new Date(n.createdAt).toLocaleDateString(),
-  })) || [];
+  const recentActivity = notificationData?.data?.slice(0, 5).map(n => {
+    const dateObj = new Date(n.createdAt || n.time);
+    return {
+      message: n.message,
+      time: isNaN(dateObj.getTime()) ? 'Just now' : dateObj.toLocaleDateString(),
+    };
+  }) || [];
 
   const [profile, setProfile] = useState({
     firstName: user?.name?.split(' ')[0] || "",
@@ -51,7 +53,6 @@ export default function StudentProfile() {
         email: profile.email,
         phone: profile.phone,
         bio: profile.bio,
-        avatar: profile.avatar,
       }).unwrap();
       setSaved(true);
       toast.success("Profile updated successfully");
@@ -97,13 +98,6 @@ export default function StudentProfile() {
                 <div className="w-32 h-32 rounded-2xl overflow-hidden border-4 border-[var(--color-background)] shadow-xl bg-[var(--color-background)]">
                   <img src={profile.avatar} alt="Profile" className="w-full h-full object-cover transition-transform group-hover:scale-110" />
                 </div>
-                <button 
-                  onClick={() => fileInputRef.current?.click()}
-                  className="absolute -bottom-3 -right-3 w-10 h-10 bg-[var(--color-primary)] text-white rounded-xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
-                >
-                  <CameraIcon size={18} />
-                </button>
-                <input type="file" ref={fileInputRef} className="hidden" accept="image/*" />
               </div>
 
               <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-3 gap-6 pt-2">

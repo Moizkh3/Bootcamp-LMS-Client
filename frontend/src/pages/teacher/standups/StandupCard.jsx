@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { MoreVertical, Clock, Link as LinkIcon, AlertCircle, CheckCircle2, User, MessageSquare } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-const StandupCard = ({ id, studentId, name, role, avatar, yesterday, today, timeLogged, blocker, isRead, onMarkRead, onFeedback }) => {
+const StandupCard = ({ id, studentId, name, role, avatar, yesterday, today, timeLogged, blocker, isRead, onMarkRead, onFeedback, date }) => {
     const [showMenu, setShowMenu] = useState(false);
     const navigate = useNavigate();
 
@@ -88,7 +88,9 @@ const StandupCard = ({ id, studentId, name, role, avatar, yesterday, today, time
 
             {/* Content */}
             <div className="flex-grow mb-6">
-                <p className="text-[10px] font-semibold text-[var(--color-text-muted)] uppercase tracking-widest mb-2">Today's Update</p>
+                <p className="text-[10px] font-semibold text-[var(--color-text-muted)] uppercase tracking-widest mb-2">
+                    {date ? `${new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} Update` : "Update"}
+                </p>
                 <p className="text-sm text-[var(--color-text-main)] leading-relaxed font-semibold">{today}</p>
             </div>
 

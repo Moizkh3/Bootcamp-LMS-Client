@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useChangePasswordMutation, useGetProfileQuery } from '../../../features/user/userApi';
 import { toast } from 'react-hot-toast';
-import { Loader2, KeyRound, ShieldAlert, CheckCircle2, XCircle } from 'lucide-react';
+import { KeyRound, ShieldAlert, CheckCircle2, XCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/common/Button';
+import Input from '../../../components/common/Input';
 
 const ChangePasswordPage = () => {
     const navigate = useNavigate();
@@ -86,45 +87,36 @@ const ChangePasswordPage = () => {
                         For your protection, please update your temporary password to a strong, personal one.
                     </p>
 
-                    <form onSubmit={handleSubmit} className="space-y-5">
-                        <div className="space-y-1">
-                            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider ml-1">Current Password</label>
-                            <input
-                                type="password"
-                                name="oldPassword"
-                                value={formData.oldPassword}
-                                onChange={handleChange}
-                                required
-                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition-all"
-                                placeholder="Enter current password"
-                            />
-                        </div>
+                    <form onSubmit={handleSubmit} className="p-1 space-y-6">
+                        <Input
+                            label="Current Password"
+                            type="password"
+                            name="oldPassword"
+                            value={formData.oldPassword}
+                            onChange={handleChange}
+                            required
+                            placeholder="Enter current password"
+                        />
 
-                        <div className="space-y-1">
-                            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider ml-1">New Password</label>
-                            <input
-                                type="password"
-                                name="newPassword"
-                                value={formData.newPassword}
-                                onChange={handleChange}
-                                required
-                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition-all"
-                                placeholder="Enter new password"
-                            />
-                        </div>
+                        <Input
+                            label="New Password"
+                            type="password"
+                            name="newPassword"
+                            value={formData.newPassword}
+                            onChange={handleChange}
+                            required
+                            placeholder="Enter new password"
+                        />
 
-                        <div className="space-y-1">
-                            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider ml-1">Confirm New Password</label>
-                            <input
-                                type="password"
-                                name="confirmPassword"
-                                value={formData.confirmPassword}
-                                onChange={handleChange}
-                                required
-                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition-all"
-                                placeholder="Repeat new password"
-                            />
-                        </div>
+                        <Input
+                            label="Confirm New Password"
+                            type="password"
+                            name="confirmPassword"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
+                            required
+                            placeholder="Repeat new password"
+                        />
 
                         <div className="bg-gray-50 rounded-2xl p-4 space-y-2 border border-gray-100">
                             <p className="text-xs font-bold text-gray-500 uppercase tracking-tight mb-2">Password Requirements</p>

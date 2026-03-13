@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Plus, Trash2, Search } from 'lucide-react';
 import Button from '../../../../components/common/Button';
 import Input from '../../../../components/common/Input';
@@ -7,6 +8,7 @@ import AddTeacherModal from '../../teachers/AddTeacherModal';
 import { useGetAllUsersQuery } from '../../../../features/user/userApi';
 
 export default function BootcampMentorsTab({ bootcampId }) {
+    const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
@@ -49,6 +51,7 @@ export default function BootcampMentorsTab({ bootcampId }) {
                 isOpen={isAddModalOpen}
                 onClose={() => setIsAddModalOpen(false)}
                 onAdd={handleAddMentor}
+                bootcampId={bootcampId}
             />
 
             <div className="bg-white border border-[#e2e8f0] rounded-xl overflow-hidden shadow-sm">
@@ -71,7 +74,12 @@ export default function BootcampMentorsTab({ bootcampId }) {
                                 filteredMentors.map((mentor) => (
                                     <tr key={mentor._id} className="hover:bg-[#f8fafc] transition-colors">
                                         <td className="px-6 py-4">
-                                            <p className="text-sm font-bold text-[#0f172a]">{mentor.name}</p>
+                                            <p 
+                                                className="text-sm font-bold text-[#0f172a] hover:text-[#1111d4] cursor-pointer transition-colors"
+                                                onClick={() => navigate(`/teachers/${mentor._id}`)}
+                                            >
+                                                {mentor.name}
+                                            </p>
                                             <p className="text-[0.7rem] text-[#64748b]">ID: {mentor._id}</p>
                                         </td>
                                         <td className="px-6 py-4 text-sm text-[#475569]">{mentor.teacherStatus || 'Instructor'}</td>

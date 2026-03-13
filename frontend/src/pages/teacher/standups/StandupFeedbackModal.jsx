@@ -96,7 +96,7 @@ const StandupFeedbackModal = ({ isOpen, onClose, standup, onAction, isLoading })
                                         <p className="text-sm sm:text-[15px] font-semibold text-gray-700 leading-relaxed capitalize whitespace-pre-wrap">{standup.yesterday || 'Any'}</p>
                                     </div>
                                     <div className="space-y-3">
-                                        <h4 className="text-[10px] sm:text-[11px] font-black text-gray-400 uppercase tracking-[0.15em]">Today's Plan</h4>
+                                        <h4 className="text-[10px] sm:text-[11px] font-black text-gray-400 uppercase tracking-[0.15em]">{formattedDate} Plan</h4>
                                         <p className="text-sm sm:text-[15px] font-semibold text-gray-700 leading-relaxed capitalize whitespace-pre-wrap">{standup.today || 'Any'}</p>
                                     </div>
                                 </div>

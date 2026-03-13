@@ -1,7 +1,7 @@
 import React from 'react';
-import { Pencil, UserMinus } from 'lucide-react';
+import { Pencil, UserMinus, KeyRound } from 'lucide-react';
 
-const TeacherCard = ({ _id: id, name, email, teacherDomainIds: domains = [], domainId, teacherBootcampIds: bootcamps, onEdit, onDelete, onClick }) => {
+const TeacherCard = ({ _id: id, name, email, teacherDomainIds: domains = [], domainId, teacherBootcampIds: bootcamps, onEdit, onDelete, onClick, onResetPassword }) => {
     // If domains is empty but domainId exists, use domainId in an array
     const displayDomains = domains.length > 0 ? domains : (domainId ? [domainId] : []);
     return (
@@ -16,6 +16,13 @@ const TeacherCard = ({ _id: id, name, email, teacherDomainIds: domains = [], dom
                     className="p-2.5 bg-white shadow-sm hover:bg-slate-50 border border-slate-100 rounded-xl text-black hover:text-primary transition-colors"
                 >
                     <Pencil size={16} />
+                </button>
+                <button
+                    onClick={(e) => { e.stopPropagation(); onResetPassword && onResetPassword(); }}
+                    className="p-2.5 bg-white shadow-sm hover:bg-amber-50 border border-slate-100 rounded-xl text-black hover:text-amber-500 transition-colors"
+                    title="Reset Password"
+                >
+                    <KeyRound size={16} />
                 </button>
                 <button
                     onClick={(e) => { e.stopPropagation(); onDelete(); }}

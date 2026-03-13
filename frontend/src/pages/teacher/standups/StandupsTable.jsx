@@ -33,7 +33,7 @@ const StandupsTable = ({ standups = [], onMarkRead, onFeedback }) => {
                     <thead>
                         <tr className="bg-[var(--color-surface)] text-[var(--color-text-muted)] text-[10px] font-semibold uppercase tracking-wider border-b border-[var(--color-border)]">
                             <th className="px-6 py-4">Student</th>
-                            <th className="px-6 py-4">Updates For Today</th>
+                            <th className="px-6 py-4">Updates</th>
                             <th className="px-6 py-4 text-center">Time Logged</th>
                             <th className="px-6 py-4 text-center">Blockers</th>
                             <th className="px-6 py-4 text-right pr-8">Actions</th>
@@ -63,6 +63,9 @@ const StandupsTable = ({ standups = [], onMarkRead, onFeedback }) => {
                                     </div>
                                 </td>
                                 <td className="px-6 py-5 max-w-xs xl:max-w-md text-left">
+                                    <p className="text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1">
+                                        {item.date ? new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : "Updates"}
+                                    </p>
                                     <p className="text-sm text-[var(--color-text-main)] font-semibold line-clamp-2">{item.today}</p>
                                 </td>
                                 <td className="px-6 py-5 text-center">

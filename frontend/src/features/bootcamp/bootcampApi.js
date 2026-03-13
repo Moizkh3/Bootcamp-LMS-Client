@@ -35,7 +35,7 @@ export const bootcampApi = createApi({
                 method: 'PUT',
                 body: updatedBootcamp,
             }),
-            invalidatesTags: ['Bootcamp'],
+            invalidatesTags: ['Bootcamp', 'User'],
         }),
 
         // 4. Delete Bootcamp

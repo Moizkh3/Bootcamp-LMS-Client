@@ -33,15 +33,6 @@ const AddDomainForm = () => {
                         placeholder="e.g. Cyber Security Essentials"
                     />
 
-                    <Select
-                        label="Select Bootcamp"
-                        options={[
-                            "Bootcamp 4.0 (Current)",
-                            "Bootcamp 5.0 (Upcoming)",
-                            "Specialized Series 2024"
-                        ]}
-                    />
-
                     <Input
                         label="Assign Mentor"
                         placeholder="Search available mentors..."

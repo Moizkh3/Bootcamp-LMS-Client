@@ -71,7 +71,6 @@ export default function AdminProfile() {
         reports: false,
         mentors: true,
     });
-    const fileInputRef = useRef(null);
     const { data: kpiData, isLoading: isKpiLoading } = useGetKpisQuery();
     const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation();
     const { data: notificationData } = useGetNotificationsQuery();
@@ -83,19 +82,16 @@ export default function AdminProfile() {
         { label: 'Pending Reviews', value: kpiData?.data?.pendingSubmissions || '0', icon: ClipboardList, color: '#7c3aed' },
     ];
 
-    const recentActivity = notificationData?.data?.slice(0, 5).map(n => ({
-        message: n.message,
-        time: n.time ? new Date(n.time).toLocaleString() : 'N/A',
-        type: n.type || 'info'
-    })) || [];
+    const recentActivity = notificationData?.data?.slice(0, 5).map(n => {
+        const dateObj = new Date(n.createdAt || n.time);
+        return {
+            message: n.message,
+            time: isNaN(dateObj.getTime()) ? 'Just now' : dateObj.toLocaleString(),
+            type: n.type || 'info'
+        };
+    }) || [];
 
-    const handleAvatarChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const url = URL.createObjectURL(file);
-            setForm(prev => ({ ...prev, avatar: url }));
-        }
-    };
+
 
     const toggleNotif = (key) => setNotifications(prev => ({ ...prev, [key]: !prev[key] }));
 
@@ -160,22 +156,6 @@ export default function AdminProfile() {
                             className="w-20 h-20 rounded-2xl object-cover border-4 border-white shadow-xl"
                             onError={e => { e.target.src = DEFAULT_AVATAR; }}
                         />
-                        {isEditing && (
-                            <button
-                                type="button"
-                                onClick={() => fileInputRef.current.click()}
-                                className="absolute -bottom-1.5 -right-1.5 w-7 h-7 bg-[var(--color-primary)] text-white rounded-lg flex items-center justify-center shadow-lg hover:bg-[var(--color-primary-soft)] transition-all hover:scale-110 active:scale-95 border-2 border-white"
-                            >
-                                <Camera size={14} />
-                            </button>
-                        )}
-                        <input
-                            ref={fileInputRef}
-                            type="file"
-                            accept="image/*"
-                            onChange={handleAvatarChange}
-                            className="hidden"
-                        />
                     </div>
                 </div>
             </div>
@@ -229,26 +209,15 @@ export default function AdminProfile() {
                                 <Field icon={User} label="Full Name" value={form.name} disabled={!isEditing} onChange={e => setForm({ ...form, name: e.target.value })} />
                                 <Field icon={Mail} label="Email Address" value={form.email} disabled={!isEditing} onChange={e => setForm({ ...form, email: e.target.value })} />
                                 <Field icon={Briefcase} label="Designation" value={form.role} disabled={!isEditing} onChange={e => setForm({ ...form, role: e.target.value })} />
-                                <div className="space-y-1.5">
+                                <div className="space-y-1.5 opacity-60">
                                     <label className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Profile Picture</label>
-                                    <div className={`flex items-center justify-between gap-3 rounded-xl px-4 py-2 border transition-colors ${!isEditing ? 'bg-[var(--color-surface-alt)] border-[var(--color-border)]' : 'bg-white border-[var(--color-primary)] ring-1 ring-[var(--color-primary)]/20'}`}>
+                                    <div className={`flex items-center justify-between gap-3 rounded-xl px-4 py-2 border transition-colors bg-[var(--color-surface-alt)] border-[var(--color-border)]`}>
                                         <div className="flex items-center gap-3">
                                             <div className="w-8 h-8 rounded-lg overflow-hidden border border-[var(--color-border)]">
                                                 <img src={form.avatar || DEFAULT_AVATAR} alt="preview" className="w-full h-full object-cover" />
                                             </div>
                                             <span className="text-sm font-semibold text-[var(--color-text-main)]">Avatar Image</span>
                                         </div>
-                                        {isEditing && (
-                                            <Button
-                                                type="button"
-                                                variant="ghost"
-                                                size="sm"
-                                                onClick={() => fileInputRef.current.click()}
-                                                className="text-[var(--color-primary)] font-bold text-xs"
-                                            >
-                                                Change
-                                            </Button>
-                                        )}
                                     </div>
                                 </div>
                             </div>

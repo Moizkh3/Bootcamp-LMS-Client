@@ -16,8 +16,10 @@ import EditTeacherModal from './EditTeacherModal';
 import DeleteConfirmationModal from '../../../components/common/DeleteConfirmationModal';
 import Button from '../../../components/common/Button';
 import TeacherAssignmentsPanel from './TeacherAssignmentsPanel';
+import ResetPasswordModal from '../../../components/common/ResetPasswordModal';
 
 const TeacherDirectory = () => {
+    const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
     const { data: usersResponse, isLoading, error } = useGetAllUsersQuery({ role: 'teacher' });
     const [deleteUser] = useDeleteUserMutation();
@@ -26,6 +28,7 @@ const TeacherDirectory = () => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false);
     const [selectedTeacher, setSelectedTeacher] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
@@ -91,8 +94,7 @@ const TeacherDirectory = () => {
     };
 
     const handleTeacherClick = (teacher) => {
-        setSelectedTeacherForAssignments(teacher);
-        setIsAssignmentsPanelOpen(true);
+        navigate(`/teachers/${teacher._id}`);
     };
 
     if (isLoading) return <div className="flex items-center justify-center min-h-[400px]">Loading teachers...</div>;
@@ -142,6 +144,7 @@ const TeacherDirectory = () => {
                         onClick={() => handleTeacherClick(teacher)}
                         onEdit={() => openEditModal(teacher)}
                         onDelete={() => handleDeleteClick(teacher)}
+                        onResetPassword={() => { setSelectedTeacher(teacher); setIsResetPasswordModalOpen(true); }}
                     />
                 ))}
             </div>
@@ -159,6 +162,13 @@ const TeacherDirectory = () => {
                 onClose={() => setIsEditModalOpen(false)}
                 onSave={handleEditTeacher}
                 teacher={selectedTeacher}
+            />
+
+            {/* Reset Password Modal */}
+            <ResetPasswordModal
+                isOpen={isResetPasswordModalOpen}
+                onClose={() => setIsResetPasswordModalOpen(false)}
+                user={selectedTeacher}
             />
 
             {/* Delete Confirmation Modal */}

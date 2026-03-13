@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../../../components/common/Button';
 import Input from '../../../../components/common/Input';
 import AddStudentModal from '../../students/AddStudentModal';
+import BulkUploadModal from '../../students/BulkUploadModal';
+import { UploadCloud } from 'lucide-react';
 
 import { useGetAllUsersQuery } from '../../../../features/user/userApi';
 
@@ -11,6 +13,7 @@ export default function BootcampStudentsTab({ bootcampId }) {
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
 
     const { data: usersResponse, isLoading, error } = useGetAllUsersQuery({
         role: 'student',
@@ -44,15 +47,27 @@ export default function BootcampStudentsTab({ bootcampId }) {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                <Button variant="primary" icon={<Plus size={18} />} onClick={() => setIsAddModalOpen(true)}>
-                    Add Student
-                </Button>
+                <div className="flex items-center gap-3 w-full md:w-auto mt-4 md:mt-0">
+                    <Button variant="secondary" icon={<UploadCloud size={18} />} onClick={() => setIsBulkModalOpen(true)}>
+                        Bulk Upload
+                    </Button>
+                    <Button variant="primary" icon={<Plus size={18} />} onClick={() => setIsAddModalOpen(true)}>
+                        Add Student
+                    </Button>
+                </div>
             </div>
 
             <AddStudentModal
                 isOpen={isAddModalOpen}
                 onClose={() => setIsAddModalOpen(false)}
                 onAdd={handleAddStudent}
+                bootcampId={bootcampId}
+            />
+
+            <BulkUploadModal
+                isOpen={isBulkModalOpen}
+                onClose={() => setIsBulkModalOpen(false)}
+                bootcampId={bootcampId}
             />
 
             <div className="bg-white border border-[#e2e8f0] rounded-xl overflow-hidden shadow-sm">

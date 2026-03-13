@@ -225,23 +225,7 @@ export default function MyAssignments() {
           ))
         )}
 
-        {/* Help card — only show on Pending tab */}
-        {activeTab === "Pending" && filtered.length > 0 && (
-          <div className="bg-[var(--color-primary)]/5 border-2 border-dashed border-[var(--color-primary)]/20 rounded-xl flex flex-col items-center justify-center p-8 text-center gap-4 group hover:bg-[var(--color-primary)]/10 transition-colors">
-            <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center shadow-lg border border-[var(--color-border)] group-hover:scale-110 transition-transform">
-              <BookOpen size={24} className="text-[var(--color-primary)]" />
-            </div>
-            <div>
-              <p className="font-bold text-[var(--color-text-main)] text-base">Need a head start?</p>
-              <p className="text-xs text-[var(--color-text-muted)] font-medium mt-1.5 leading-relaxed max-w-[200px] mx-auto">
-                Check out the supplementary materials for next week's JavaScript challenge.
-              </p>
-            </div>
-            <button className="text-[var(--color-primary)] text-sm font-bold hover:underline underline-offset-4 decoration-[var(--color-primary)]/30 flex items-center gap-1 group/btn">
-              Browse Resources <ChevronRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
-            </button>
-          </div>
-        )}
+
       </div>
     </div>
   );

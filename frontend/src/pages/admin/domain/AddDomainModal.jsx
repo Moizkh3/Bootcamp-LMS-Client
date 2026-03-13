@@ -16,21 +16,10 @@ const AddDomainModal = ({ isOpen, onClose, onAdd }) => {
 
     const [formData, setFormData] = useState({
         name: '',
-        bootcamp: '',
         status: 'Active',
         type: 'Core Track',
         mentorName: '',
-        mentorAvatar: ''
     });
-    const fileInputRef = useRef(null);
-
-    const handleAvatarChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const url = URL.createObjectURL(file);
-            setFormData(prev => ({ ...prev, mentorAvatar: url }));
-        }
-    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -38,7 +27,6 @@ const AddDomainModal = ({ isOpen, onClose, onAdd }) => {
         onClose();
         setFormData({
             name: '',
-            bootcamp: '',
             status: 'Active',
             type: 'Core Track',
             mentorName: '',
@@ -77,17 +65,6 @@ const AddDomainModal = ({ isOpen, onClose, onAdd }) => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <Select
-                        label="Assign Bootcamp"
-                        required
-                        placeholder="Select bootcamp"
-                        value={formData.bootcamp}
-                        onChange={(e) => setFormData({ ...formData, bootcamp: e.target.value })}
-                        options={bootcamps.map(b => ({
-                            label: b.name,
-                            value: b._id
-                        }))}
-                    />
-                    <Select
                         label="Initial Status"
                         value={formData.status}
                         onChange={(e) => setFormData({ ...formData, status: e.target.value })}
@@ -117,43 +94,7 @@ const AddDomainModal = ({ isOpen, onClose, onAdd }) => {
                             value: t.name
                         }))}
                     />
-                    <div className="flex flex-col items-center gap-4 py-2 border-b border-[var(--color-border)] pb-6 mb-2">
-                        <div className="relative group/avatar">
-                            <div className="w-20 h-20 rounded-2xl overflow-hidden ring-4 ring-[var(--color-primary)]/10 shadow-lg bg-gray-50 flex items-center justify-center border border-[var(--color-border)]">
-                                {formData.mentorAvatar ? (
-                                    <img src={formData.mentorAvatar} alt="mentor avatar" className="w-full h-full object-cover transition-transform group-hover/avatar:scale-110 duration-500" />
-                                ) : (
-                                    <User size={32} className="text-gray-300" />
-                                )}
-                            </div>
-                            <button
-                                type="button"
-                                onClick={() => fileInputRef.current.click()}
-                                className="absolute -bottom-2 -right-2 w-8 h-8 bg-[var(--color-primary)] text-white rounded-lg flex items-center justify-center shadow-lg hover:bg-[var(--color-primary-soft)] transition-all hover:scale-110 active:scale-95"
-                            >
-                                <Camera size={14} />
-                            </button>
-                            <input
-                                ref={fileInputRef}
-                                type="file"
-                                accept="image/*"
-                                onChange={handleAvatarChange}
-                                className="hidden"
-                            />
-                        </div>
-                        <div className="text-center">
-                            <p className="text-sm font-bold text-[var(--color-text-main)]">Mentor Photo</p>
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => fileInputRef.current.click()}
-                                className="text-[var(--color-primary)] font-bold text-xs mt-1"
-                            >
-                                Upload Photo
-                            </Button>
-                        </div>
-                    </div>
+
                 </div>
 
                 <div className="p-4 bg-[var(--color-primary-muted)]/30 border border-[var(--color-primary)]/10 rounded-xl flex gap-3">

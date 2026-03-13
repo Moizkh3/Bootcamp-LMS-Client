@@ -1,4 +1,5 @@
 import { Download, Plus, Search } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import DomainItemCard from './DomainItemCard';
 import AddDomainForm from './AddDomainForm';
 import AddDomainModal from './AddDomainModal';
@@ -9,7 +10,6 @@ import Breadcrumbs from '../../../components/common/Breadcrumbs';
 import Select from '../../../components/common/Select';
 import Input from '../../../components/common/Input';
 import Button from '../../../components/common/Button';
-import DomainStudentsPanel from './DomainStudentsPanel';
 import {
     useGetAllDomainsQuery,
     useAddDomainMutation,
@@ -22,6 +22,7 @@ import { useState } from 'react';
 
 
 const DomainManagement = () => {
+    const navigate = useNavigate();
     const { data: domainsResponse, isLoading, error } = useGetAllDomainsQuery();
     const [addDomain] = useAddDomainMutation();
     const [editDomain] = useEditDomainMutation();
@@ -40,18 +41,25 @@ const DomainManagement = () => {
     const [isDeleting, setIsDeleting] = useState(false);
     const [bootcampContext, setBootcampContext] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
-    
-    // State for the slide-over panel
-    const [selectedDomainForStudents, setSelectedDomainForStudents] = useState(null);
-    const [isStudentsPanelOpen, setIsStudentsPanelOpen] = useState(false);
 
     const domainsList = domainsResponse?.data || [];
 
     const filteredDomains = domainsList.filter(domain => {
-        // Bootcamp Context Filter - handle both ID (new) and Name (legacy string)
-        const matchesContext = bootcampContext === 'All' ||
-            domain.bootcamp === bootcampContext ||
-            (domain.bootcamp?._id === bootcampContext);
+        // Bootcamp Context Filter
+        let matchesContext = bootcampContext === 'All';
+        
+        if (bootcampContext !== 'All') {
+            const selectedBootcamp = bootcamps.find(b => b._id === bootcampContext);
+            const isUsedInSelectedBootcamp = selectedBootcamp?.domains?.some(d => {
+                const id = d._id || d;
+                return id === domain._id;
+            });
+            
+            // Also maintain legacy check just in case
+            const isDirectLegacyMatch = domain.bootcamp === bootcampContext || (domain.bootcamp?._id === bootcampContext);
+            
+            matchesContext = isUsedInSelectedBootcamp || isDirectLegacyMatch;
+        }
 
         // Search Filter
         const matchesSearch = domain.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -108,8 +116,7 @@ const DomainManagement = () => {
     };
 
     const handleDomainCardClick = (domain) => {
-        setSelectedDomainForStudents(domain);
-        setIsStudentsPanelOpen(true);
+        navigate(`/domains/${domain._id}`);
     };
 
     if (isLoading) return <div className="flex items-center justify-center min-h-[400px]">Loading domains...</div>;
@@ -227,12 +234,6 @@ const DomainManagement = () => {
                 message="Are you sure you want to delete this domain? Mentors assigned to this track will be unlinked, and student distribution settings for this domain will be reset."
             />
 
-            {/* Students Slide-over Panel */}
-            <DomainStudentsPanel 
-                isOpen={isStudentsPanelOpen}
-                onClose={() => setIsStudentsPanelOpen(false)}
-                domain={selectedDomainForStudents}
-            />
         </div>
     );
 };

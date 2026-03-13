@@ -5,11 +5,13 @@ import DashboardLayout from '../components/layout/DashboardLayout';
 import Dashboard from '../pages/admin/dashboard/Dashboard';
 import Analytics from '../pages/admin/analytics/Analytics';
 import DomainManagement from '../pages/admin/domain/DomainManagement';
+import DomainOverview from '../pages/admin/domain/DomainOverview';
 import StudentDirectory from '../pages/admin/students/StudentDirectory';
 import TeacherDirectory from '../pages/admin/teachers/TeacherDirectory';
 import BootcampList from '../pages/admin/bootcamps/BootcampList';
 import CreateBootcamp from '../pages/admin/bootcamps/CreateBootcamp';
 import BootcampOverview from '../pages/admin/bootcamps/BootcampOverview';
+import TeacherDetails from '../pages/admin/teachers/TeacherDetails';
 import AdminProfile from '../pages/admin/profile/AdminProfile';
 import AdminStandups from '../pages/admin/standups/AdminStandups';
 import Announcements from '../pages/admin/announcements/Announcements';
@@ -67,7 +69,9 @@ const AppRoutes = () => {
                             <Route path="/" element={<Dashboard />} />
                             <Route path="/analytics" element={<Analytics />} />
                             <Route path="/domains" element={<DomainManagement />} />
+                            <Route path="/domains/:id" element={<DomainOverview />} />
                             <Route path="/teachers" element={<TeacherDirectory />} />
+                            <Route path="/teachers/:id" element={<TeacherDetails />} />
                             <Route path="/students" element={<StudentDirectory />} />
                             <Route path="/students/:id" element={<StudentProfile />} />
                             <Route path="/bootcamps" element={<BootcampList />} />

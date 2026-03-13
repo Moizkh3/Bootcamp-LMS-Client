@@ -3,25 +3,41 @@ import { UploadCloud, CheckCircle2, AlertCircle, FileText, X, Download } from 'l
 import Modal from '../../../components/common/Modal';
 import Button from '../../../components/common/Button';
 import Select from '../../../components/common/Select';
-import { useGetAllBootcampsQuery } from '../../../features/bootcamp/bootcampApi';
+import { useGetAllBootcampsQuery, useGetBootcampByIdQuery } from '../../../features/bootcamp/bootcampApi';
 import { useGetAllDomainsQuery } from '../../../features/domain/domainApi';
 import { useBulkRegisterMutation } from '../../../features/auth/authServiceApi';
 import { toast } from 'react-hot-toast';
 
-const BulkUploadModal = ({ isOpen, onClose }) => {
+const BulkUploadModal = ({ isOpen, onClose, bootcampId: initialBootcampId }) => {
     const [file, setFile] = useState(null);
-    const [bootcampId, setBootcampId] = useState('');
+    const [bootcampId, setBootcampId] = useState(initialBootcampId || '');
     const [domainId, setDomainId] = useState('');
     const [status, setStatus] = useState('idle'); // 'idle' | 'uploading' | 'success' | 'error'
     const [errorMessage, setErrorMessage] = useState('');
     const fileInputRef = useRef(null);
 
     const { data: bootcampsResponse } = useGetAllBootcampsQuery({});
-    const { data: domainsResponse } = useGetAllDomainsQuery();
+    const { data: domainsResponse } = useGetAllDomainsQuery({ skip: !!bootcampId });
+    const { data: bootcampDataResponse } = useGetBootcampByIdQuery(bootcampId || '', { skip: !bootcampId });
     const [bulkRegister] = useBulkRegisterMutation();
 
     const bootcamps = bootcampsResponse?.data || [];
-    const domains = domainsResponse?.data || [];
+    const allDomains = domainsResponse?.data || [];
+    
+    const relevantDomains = bootcampId ? (bootcampDataResponse?.data?.domains || []) : allDomains;
+
+    React.useEffect(() => {
+        if (isOpen) {
+            setBootcampId(initialBootcampId || '');
+            setDomainId('');
+        }
+    }, [isOpen, initialBootcampId]);
+
+    React.useEffect(() => {
+        if (relevantDomains.length === 1 && !domainId) {
+            setDomainId(relevantDomains[0]._id);
+        }
+    }, [relevantDomains, domainId]);
 
     const handleFileChange = (e) => {
         const selected = e.target.files[0];
@@ -70,7 +86,7 @@ const BulkUploadModal = ({ isOpen, onClose }) => {
 
     const handleClose = () => {
         setFile(null);
-        setBootcampId('');
+        setBootcampId(initialBootcampId || '');
         setDomainId('');
         setStatus('idle');
         setErrorMessage('');
@@ -149,21 +165,25 @@ const BulkUploadModal = ({ isOpen, onClose }) => {
                 </button>
 
                 {/* Bootcamp & Domain Selects */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Select
-                        label="Bootcamp"
-                        placeholder="Select bootcamp"
-                        value={bootcampId}
-                        onChange={(e) => setBootcampId(e.target.value)}
-                        options={bootcamps.map(bc => ({ value: bc._id, label: bc.name }))}
-                    />
-                    <Select
-                        label="Domain"
-                        placeholder="Select domain"
-                        value={domainId}
-                        onChange={(e) => setDomainId(e.target.value)}
-                        options={domains.map(d => ({ value: d._id, label: d.name }))}
-                    />
+                <div className={`grid grid-cols-1 ${!initialBootcampId && relevantDomains.length !== 1 ? 'sm:grid-cols-2' : ''} gap-4`}>
+                    {!initialBootcampId && (
+                        <Select
+                            label="Bootcamp"
+                            placeholder="Select bootcamp"
+                            value={bootcampId}
+                            onChange={(e) => setBootcampId(e.target.value)}
+                            options={bootcamps.map(bc => ({ value: bc._id, label: bc.name }))}
+                        />
+                    )}
+                    {relevantDomains.length !== 1 && (
+                        <Select
+                            label="Domain"
+                            placeholder="Select domain"
+                            value={domainId}
+                            onChange={(e) => setDomainId(e.target.value)}
+                            options={relevantDomains.map(d => ({ value: d._id, label: d.name }))}
+                        />
+                    )}
                 </div>
 
                 {/* Info / Status */}
