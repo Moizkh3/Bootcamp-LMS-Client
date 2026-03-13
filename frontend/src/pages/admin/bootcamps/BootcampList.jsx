@@ -208,7 +208,7 @@ export default function BootcampList() {
                 {/* Pagination */}
                 <div className="px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-[#f1f5f9]">
                     <p className="text-sm text-[#64748b]">
-                        Showing <span className="font-bold text-[#0f172a]">1 to {bootcampsList.length}</span> of <span className="font-bold text-[#0f172a]">{bootcampsList.length}</span> bootcamps
+                        Showing <span className="font-bold text-[#0f172a]">{bootcampsList.length > 0 ? `1 to ${bootcampsList.length}` : '0'}</span> of <span className="font-bold text-[#0f172a]">{bootcampsList.length}</span> bootcamps
                     </p>
                     <div className="flex items-center gap-2">
                         <button className="p-2 text-[#94a3b8] hover:text-[#1111d4] disabled:opacity-50" disabled>
