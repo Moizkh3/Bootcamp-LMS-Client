@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import "tailwindcss";
+
+@theme {
+    --color-primary: #1111d4;
+    --color-primary-soft: #3636e2;
+    --color-primary-muted: rgba(17, 17, 212, 0.1);
+
+    --color-text-main: #0f172a;
+    --color-text-muted: #64748b;
+    --color-text-light: #94a3b8;
+
+    --color-surface: #ffffff;
+    --color-surface-alt: #f8fafc;
+    --color-background: #f6f6f8;
+    --color-border: #e2e8f0;
+    --color-border-soft: #f1f5f9;
+
+    --color-success: #059669;
+    --color-success-bg: #ecfdf5;
+    --color-error: #e11d48;
+    --color-error-bg: #fff1f2;
+    --color-warning: #d97706;
+    --color-warning-bg: #fff7ed;
+    --color-info: #0284c7;
+    --color-info-bg: #f0f9ff;
+    --color-accent: #7c3aed;
+    --color-accent-bg: #f5f3ff;
+
+    --font-outfit: "Outfit", sans-serif;
+
+    --shadow-premium: 0 10px 30px -12px rgba(17, 17, 212, 0.12);
+    --shadow-card: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+
+    --transition-base: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@layer base {
+    body {
+        font-family: var(--font-outfit);
+        background-color: var(--color-background);
+        color: var(--color-text-main);
+    }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Page heading utility — matches Dashboard Overview style */
+.page-heading {
+    font-size: 1.5rem;
+    /* text-2xl */
+    font-weight: 700;
+    /* font-bold */
+    color: var(--color-text-main);
+    line-height: 1.25;
+}
