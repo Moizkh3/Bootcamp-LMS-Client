@@ -11,11 +11,17 @@ import { useGetAllBootcampsQuery } from '../../../features/bootcamp/bootcampApi'
 import { useGetAllDomainsQuery } from '../../../features/domain/domainApi';
 import Breadcrumbs from '../../../components/common/Breadcrumbs';
 import toast from 'react-hot-toast';
+import DeleteConfirmationModal from '../../../components/common/DeleteConfirmationModal';
 
 export default function Announcements() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [bootcampFilter, setBootcampFilter] = useState('all');
+    
+    // Delete Confirmation State
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [announcementToDelete, setAnnouncementToDelete] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const { data: announcementsResponse, isLoading } = useGetAnnouncementsQuery({});
     const { data: bootcampsData } = useGetAllBootcampsQuery();
@@ -46,14 +52,24 @@ export default function Announcements() {
         }
     };
 
-    const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this announcement?')) {
-            try {
-                await deleteAnnouncement(id).unwrap();
-                toast.success('Announcement deleted');
-            } catch (err) {
-                toast.error(err.data?.message || 'Failed to delete');
-            }
+    const triggerDelete = (id) => {
+        setAnnouncementToDelete(id);
+        setIsDeleteModalOpen(true);
+    };
+    
+    const confirmDelete = async () => {
+        if (!announcementToDelete) return;
+        
+        setIsDeleting(true);
+        try {
+            await deleteAnnouncement(announcementToDelete).unwrap();
+            toast.success('Announcement deleted');
+            setIsDeleteModalOpen(false);
+            setAnnouncementToDelete(null);
+        } catch (err) {
+            toast.error(err.data?.message || 'Failed to delete');
+        } finally {
+            setIsDeleting(false);
         }
     };
 
@@ -142,7 +158,7 @@ export default function Announcements() {
                                     </div>
                                 </div>
                                 <button 
-                                    onClick={() => handleDelete(a._id)}
+                                    onClick={() => triggerDelete(a._id)}
                                     className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
                                 >
                                     <Trash2 size={20} />
@@ -181,6 +197,18 @@ export default function Announcements() {
                 onClose={() => setIsModalOpen(false)}
                 onPost={handlePost}
                 isAdmin={true}
+            />
+
+            <DeleteConfirmationModal 
+                isOpen={isDeleteModalOpen}
+                onClose={() => {
+                    setIsDeleteModalOpen(false);
+                    setAnnouncementToDelete(null);
+                }}
+                onConfirm={confirmDelete}
+                isDeleting={isDeleting}
+                title="Delete Announcement"
+                message="Are you sure you want to delete this announcement? This action cannot be undone."
             />
         </div>
     );
