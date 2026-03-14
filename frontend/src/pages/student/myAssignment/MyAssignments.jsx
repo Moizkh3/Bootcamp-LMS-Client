@@ -185,9 +185,9 @@ export default function MyAssignments() {
                     <span className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-lg shadow-sm border ${a.statusClass}`}>
                       {a.statusLabel}
                     </span>
-                    {a.score && (
+                    {a.grade !== null && a.grade !== undefined && (
                       <span className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-lg bg-amber-50 text-amber-600 border border-amber-100 shadow-sm flex items-center gap-1">
-                        ⭐ {a.score}
+                        ⭐ {a.grade}
                       </span>
                     )}
                   </div>

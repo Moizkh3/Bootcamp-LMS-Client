@@ -19,13 +19,6 @@ const AddDomainModal = ({ isOpen, onClose, onAdd }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         
-        if (formData.mentorIds.length === 0) {
-            import('react-hot-toast').then(({ toast }) => {
-                toast.error('Please assign at least one mentor to this domain');
-            });
-            return;
-        }
-
         onAdd(formData);
         onClose();
         setFormData({

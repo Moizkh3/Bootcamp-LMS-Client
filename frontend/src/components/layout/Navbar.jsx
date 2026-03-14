@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Bell, Menu } from 'lucide-react';
+import { Bell, Menu } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../features/auth/authSelectors';
@@ -41,7 +41,6 @@ export default function Navbar({ onToggleSidebar }) {
     return (
         <header className="sticky top-0 z-40 bg-white border-b border-[#e2e8f0] h-16 flex items-center shrink-0">
             <div className="w-full flex justify-between items-center px-4 md:px-8 h-full">
-                {/* Left Side: Toggle and Search */}
                 <div className="flex items-center gap-4 flex-1">
                     <button
                         onClick={onToggleSidebar}
@@ -49,19 +48,6 @@ export default function Navbar({ onToggleSidebar }) {
                     >
                         <Menu size={20} />
                     </button>
-
-                    <div className="flex-1 max-w-[576px]">
-                        <div className="relative group">
-                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <Search size={18} className="text-[#94a3b8] group-focus-within:text-[#1111d4] transition-colors" />
-                            </div>
-                            <input
-                                type="text"
-                                placeholder="Search for students, bootcamps or logs..."
-                                className="block w-full h-10 pl-10 pr-4 text-sm text-[#0f172a] bg-[#f1f5f9] rounded-lg border-none focus:ring-2 focus:ring-[#1111d4]/20 transition-all placeholder:text-[#94a3b8]"
-                            />
-                        </div>
-                    </div>
                 </div>
 
                 {/* Right Actions */}

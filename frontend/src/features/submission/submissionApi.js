@@ -42,7 +42,10 @@ export const submissionApi = createApi({
             providesTags: ['Submissions'],
         }),
         getSubmissionByAssignment: builder.query({
-            query: (assignmentId) => `/submission?assignment=${assignmentId}`,
+            query: (assignmentId) => ({
+                url: '/submission',
+                params: { assignment: assignmentId }
+            }),
             providesTags: ['Submissions'],
         }),
     }),

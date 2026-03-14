@@ -8,9 +8,20 @@ export default function FeedbackDetail() {
   const navigate = useNavigate();
   const { id: assignmentId } = useParams();
 
-  const { data: submissionsResponse, isLoading: submissionsLoading } = useGetSubmissionByAssignmentQuery(assignmentId, {
-    skip: !assignmentId
+  console.log("FeedbackDetail - Assignment ID from params:", assignmentId);
+
+  // If no assignmentId is provided (e.g., from Sidebar), we'll fetch all and show newest
+  const { data: submissionsResponse, isLoading: submissionsLoading, error: submissionsError } = useGetSubmissionByAssignmentQuery(assignmentId, {
+    // We allow calling even without ID to catch generic feedback requests from the sidebar
   });
+  
+  console.log("FeedbackDetail - Query Status:", { 
+    assignmentId: assignmentId || 'none (fetching all/latest)', 
+    submissionsLoading, 
+    hasData: !!submissionsResponse, 
+    error: submissionsError 
+  });
+  
   const submissions = submissionsResponse?.submissions || [];
   
   // Get latest submission

@@ -31,7 +31,7 @@ export const bootcampApi = createApi({
         // 3. Edit Bootcamp
         editBootcamp: builder.mutation({
             query: ({ id, ...updatedBootcamp }) => ({
-                url: `/bootcamp/${id}`,
+                url: `/bootcamp/edit/${id}`,
                 method: 'PUT',
                 body: updatedBootcamp,
             }),
@@ -41,7 +41,7 @@ export const bootcampApi = createApi({
         // 4. Delete Bootcamp
         deleteBootcamp: builder.mutation({
             query: (id) => ({
-                url: `/bootcamp/${id}`,
+                url: `/bootcamp/delete/${id}`,
                 method: 'DELETE',
             }),
             invalidatesTags: ['Bootcamp'],

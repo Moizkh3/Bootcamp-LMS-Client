@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BASE_URL } from '../../utils/constants';
+import { studentApi } from '../student/studentApi';
+import { submissionApi } from '../submission/submissionApi';
 
 export const teacherApi = createApi({
     reducerPath: 'teacherApi',
@@ -58,6 +60,16 @@ export const teacherApi = createApi({
                 body: reviewData,
             }),
             invalidatesTags: ['TeacherSubmission', 'TeacherStats'],
+            async onQueryStarted(args, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    // Invalidate student and submission APIs to reflect feedback everywhere
+                    dispatch(studentApi.util.invalidateTags(['StudentAssignments', 'StudentStats']));
+                    dispatch(submissionApi.util.invalidateTags(['Submissions']));
+                } catch (err) { 
+                    console.error("Cross-API Invalidation Failed (Assignment):", err);
+                }
+            },
         }),
 
         // 7. Get Submissions for an assignment
@@ -92,6 +104,17 @@ export const teacherApi = createApi({
                 body: data,
             }),
             invalidatesTags: ['TeacherSubmission', 'TeacherStats'],
+            async onQueryStarted(args, { dispatch, queryFulfilled }) {
+                try {
+                    const { progressApi } = await import('../progress/progressApi');
+                    const { studentApi } = await import('../student/studentApi');
+                    await queryFulfilled;
+                    // Invalidate student-side progress and stats
+                    dispatch(progressApi.util.invalidateTags(['Progress', 'StandupStatus']));
+                    dispatch(studentApi.util.invalidateTags(['StudentStats']));
+                } catch (err) {
+                }
+            },
         }),
     }),
 });
