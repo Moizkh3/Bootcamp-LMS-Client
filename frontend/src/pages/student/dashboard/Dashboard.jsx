@@ -4,7 +4,8 @@ import Breadcrumbs from "../../../components/common/Breadcrumbs";
 import StatCard from "../../../components/common/StatCard";
 import Button from "../../../components/common/Button";
 import { useSelector } from "react-redux";
-import { useGetStudentStatsQuery, useGetTodayStandupStatusQuery, useGetStudentAssignmentsQuery } from "../../../features/student/studentApi";
+import { useGetStudentStatsQuery, useGetStudentAssignmentsQuery } from "../../../features/student/studentApi";
+import { useGetTodayStandupStatusQuery } from "../../../features/progress/progressApi";
 import { useGetAnnouncementsQuery } from "../../../features/announcement/announcementApi";
 
 

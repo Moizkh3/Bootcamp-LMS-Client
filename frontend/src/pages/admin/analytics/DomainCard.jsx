@@ -13,7 +13,7 @@ const DomainCard = ({ domain, index }) => {
     const Icon = icons[index % icons.length];
 
     // Status based on students count or activity if we had it
-    const status = domain.students > 0 ? 'Active' : 'Empty';
+    const status = (domain.studentsCount || 0) > 0 ? 'Active' : 'Empty';
 
     const statusColors = {
         'Active': 'bg-green-100 text-green-700',
@@ -37,12 +37,12 @@ const DomainCard = ({ domain, index }) => {
             <div className="mt-auto pt-4 border-t border-slate-100">
                 <div className="flex items-center justify-between text-[10px]">
                     <span className="text-slate-600 font-medium">Enrolled Students</span>
-                    <span className="font-bold text-slate-800">{domain.students || 0}</span>
+                    <span className="font-bold text-slate-800">{domain.studentsCount || 0}</span>
                 </div>
                 <div className="w-full bg-slate-100 h-1.5 rounded-full mt-2 overflow-hidden">
                     <div
                         className="bg-[#3636e2] h-full rounded-full transition-all duration-500"
-                        style={{ width: `${Math.min(100, (domain.students || 0) * 5)}%` }}
+                        style={{ width: `${Math.min(100, (domain.studentsCount || 0) * 5)}%` }}
                     ></div>
                 </div>
             </div>

@@ -21,7 +21,7 @@ const Analytics = () => {
     const kpis = kpisResponse?.data;
 
     const { data: usersResponse, isLoading: usersLoading } = useGetAllUsersQuery({ role: 'student' });
-    const students = usersResponse?.data || [];
+    const students = usersResponse?.users || [];
 
     const renderContent = () => {
         if (domainsLoading || usersLoading || kpisLoading) {

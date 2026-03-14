@@ -211,6 +211,7 @@ const TeacherDashboard = () => {
             <RecentActivityModal
                 isOpen={isActivityModalOpen}
                 onClose={() => setIsActivityModalOpen(false)}
+                activities={teacherStats.recentActivity || []}
             />
         </div>
     );

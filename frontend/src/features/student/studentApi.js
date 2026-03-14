@@ -7,7 +7,7 @@ export const studentApi = createApi({
         baseUrl: `${BASE_URL}/student-dashboard`,
         credentials: 'include',
     }),
-    tagTypes: ['StudentStats', 'StudentAssignments', 'StandupStatus'],
+    tagTypes: ['StudentStats', 'StudentAssignments'],
     endpoints: (builder) => ({
         // 1. Get Student Stats
         getStudentStats: builder.query({
@@ -20,17 +20,10 @@ export const studentApi = createApi({
             query: () => '/assignments',
             providesTags: ['StudentAssignments'],
         }),
-
-        // 3. Check if today's standup is submitted
-        getTodayStandupStatus: builder.query({
-            query: () => '/is-submit-today-standup',
-            providesTags: ['StandupStatus'],
-        }),
     }),
 });
 
 export const {
     useGetStudentStatsQuery,
     useGetStudentAssignmentsQuery,
-    useGetTodayStandupStatusQuery,
 } = studentApi;

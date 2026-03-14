@@ -1,24 +1,30 @@
 import React, { useState } from 'react';
-import { Plus, Trash2, Search, ExternalLink } from 'lucide-react';
+import { Plus, Trash2, Search, ExternalLink, UploadCloud } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../../components/common/Button';
 import Input from '../../../../components/common/Input';
 import AddStudentModal from '../../students/AddStudentModal';
 import BulkUploadModal from '../../students/BulkUploadModal';
-import { UploadCloud } from 'lucide-react';
-
-import { useGetAllUsersQuery } from '../../../../features/user/userApi';
+import DeleteConfirmationModal from '../../../../components/common/DeleteConfirmationModal';
+import { useGetAllUsersQuery, useDeleteUserMutation } from '../../../../features/user/userApi';
+import { toast } from 'react-hot-toast';
 
 export default function BootcampStudentsTab({ bootcampId }) {
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
+    
+    // Deletion State
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [studentToDelete, setStudentToDelete] = useState(null);
 
     const { data: usersResponse, isLoading, error } = useGetAllUsersQuery({
         role: 'student',
         bootcampId
     });
+
+    const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
     const students = usersResponse?.users || [];
 
@@ -27,13 +33,25 @@ export default function BootcampStudentsTab({ bootcampId }) {
         s.email.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const handleRemoveStudent = (id) => {
-        // Mutation for removing student from bootcamp to be implemented
-        console.log('Remove student', id);
+    const handleRemoveStudentClick = (student) => {
+        setStudentToDelete(student);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!studentToDelete) return;
+
+        try {
+            await deleteUser(studentToDelete._id).unwrap();
+            toast.success('Student removed from system successfully');
+            setIsDeleteModalOpen(false);
+            setStudentToDelete(null);
+        } catch (err) {
+            toast.error(err?.data?.message || 'Failed to remove student');
+        }
     };
 
     const handleAddStudent = (studentData) => {
-        // Redux handles re-fetching after successful modal action if configured
         setIsAddModalOpen(false);
     };
 
@@ -68,6 +86,18 @@ export default function BootcampStudentsTab({ bootcampId }) {
                 isOpen={isBulkModalOpen}
                 onClose={() => setIsBulkModalOpen(false)}
                 bootcampId={bootcampId}
+            />
+
+            <DeleteConfirmationModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => {
+                    setIsDeleteModalOpen(false);
+                    setStudentToDelete(null);
+                }}
+                onConfirm={handleConfirmDelete}
+                itemName={studentToDelete?.name}
+                isDeleting={isDeleting}
+                message="Are you sure you want to remove this student? This action will permanently delete their account and all associated progress data."
             />
 
             <div className="bg-white border border-[#e2e8f0] rounded-xl overflow-hidden shadow-sm">
@@ -114,7 +144,7 @@ export default function BootcampStudentsTab({ bootcampId }) {
                                                     <ExternalLink size={18} />
                                                 </button>
                                                 <button
-                                                    onClick={() => handleRemoveStudent(student._id)}
+                                                    onClick={() => handleRemoveStudentClick(student)}
                                                     className="p-1.5 text-[#94a3b8] hover:text-[#ef4444] hover:bg-[#ef4444]/5 rounded transition-all"
                                                     title="Remove Student"
                                                 >
@@ -138,3 +168,4 @@ export default function BootcampStudentsTab({ bootcampId }) {
         </div>
     );
 }
+

@@ -19,6 +19,8 @@ import Breadcrumbs from '../../../components/common/Breadcrumbs';
 import Button from '../../../components/common/Button';
 import Input from '../../../components/common/Input';
 import { toast } from 'react-hot-toast';
+import StatusSelect from '../../../components/common/StatusSelect';
+import { useUpdateUserMutation } from '../../../features/user/userApi';
 
 const StudentProgressDetails = () => {
     const { studentId } = useParams();
@@ -28,6 +30,7 @@ const StudentProgressDetails = () => {
 
     const { data: response, isLoading, error, refetch } = useGetStudentProgressQuery(studentId);
     const [giveFeedback, { isLoading: isSubmittingFeedback }] = useGiveStandupFeedbackMutation();
+    const [updateUser, { isLoading: isUpdatingStatus }] = useUpdateUserMutation();
 
     const studentData = response?.data || {};
     const { student, standups = [], submissions = [] } = studentData;
@@ -41,6 +44,16 @@ const StudentProgressDetails = () => {
             refetch();
         } catch (err) {
             toast.error(err?.data?.message || 'Failed to submit feedback');
+        }
+    };
+
+    const handleStatusChange = async (newStatus) => {
+        try {
+            await updateUser({ id: studentId, studentStatus: newStatus }).unwrap();
+            toast.success(`Student status updated to ${newStatus === 'enrolled' ? 'Active' : newStatus === 'completed' ? 'Graduated' : 'Dropped Out'}`);
+            refetch();
+        } catch (err) {
+            toast.error(err?.data?.message || 'Failed to update student status');
         }
     };
 
@@ -80,6 +93,19 @@ const StudentProgressDetails = () => {
                         </button>
                     </div>
                 </div>
+            </div>
+
+            {/* Status Management Bar */}
+            <div className="bg-white border border-[var(--color-border)] rounded-2xl p-4 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+                <div className="flex items-center gap-2 text-sm font-bold text-[var(--color-text-muted)] uppercase tracking-wider">
+                    <CheckCircle2 size={16} className="text-[var(--color-primary)]" />
+                    Manage Student Status
+                </div>
+                <StatusSelect 
+                    currentStatus={student?.studentStatus} 
+                    onStatusChange={handleStatusChange} 
+                    isLoading={isUpdatingStatus}
+                />
             </div>
 
             {activeTab === 'standups' ? (

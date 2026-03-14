@@ -42,8 +42,8 @@ const StudentTable = ({ students, onUpdate, onDelete, onToggleStatus }) => {
     };
 
     return (
-        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-            <div className="overflow-x-auto scrollbar-hide">
+        <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-visible">
+            <div className="overflow-x-auto scrollbar-hide min-h-[350px]">
                 <table className="w-full text-left border-collapse min-w-[900px]">
                     <thead>
                         <tr className="bg-slate-50 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
@@ -56,7 +56,7 @@ const StudentTable = ({ students, onUpdate, onDelete, onToggleStatus }) => {
                             <th className="px-4 py-3.5 text-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-slate-100 min-h-[150px]">
                         {students.map((student) => (
                             <StudentRow
                                 key={student._id}

@@ -59,10 +59,10 @@ const StudentDirectory = () => {
     };
 
     const handleToggleStatus = async (id, currentStatus) => {
-        const newStatus = currentStatus === 'suspended' ? 'enrolled' : 'suspended';
+        const newStatus = currentStatus === 'dropout' ? 'enrolled' : 'dropout';
         try {
             await updateUser({ id, studentStatus: newStatus }).unwrap();
-            toast.success(`Student status updated to ${newStatus}`);
+            toast.success(`Student status updated successfully`);
         } catch (err) {
             toast.error(err?.data?.message || 'Failed to update student status');
         }

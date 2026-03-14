@@ -4,7 +4,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recha
 const EnrollmentChart = ({ domains = [] }) => {
     const data = domains.map(d => ({
         name: d.name,
-        value: d.students || 0
+        value: d.studentsCount || 0
     })).filter(d => d.value > 0);
 
     const COLORS = ['#3636e2', '#8b5cf6', '#ec4899', '#06b6d4', '#10b981', '#f59e0b'];

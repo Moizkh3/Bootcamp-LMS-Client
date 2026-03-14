@@ -5,12 +5,12 @@ const StudentRow = ({ _id: id, name, email, studentStatus: status, studentBootca
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef(null);
 
-    const isSuspended = status === 'dropout';
+    const isDroppedOut = status === 'dropout' || status === 'suspended';
 
     const statusLabels = {
         'enrolled': 'Active',
         'completed': 'Graduated',
-        'dropout': 'Suspended',
+        'dropout': 'Dropped Out',
     };
 
     const statusColors = {
@@ -73,9 +73,9 @@ const StudentRow = ({ _id: id, name, email, studentStatus: status, studentBootca
                             </button>
                             <button
                                 onClick={() => { onToggleStatus(status); setIsMenuOpen(false); }}
-                                className={`w-full px-4 py-2 flex items-center gap-3 text-xs font-bold transition-colors ${isSuspended ? 'text-green-600 hover:bg-green-50' : 'text-slate-700 hover:bg-slate-50'}`}
+                                className={`w-full px-4 py-2 flex items-center gap-3 text-xs font-bold transition-colors ${isDroppedOut ? 'text-green-600 hover:bg-green-50' : 'text-slate-700 hover:bg-slate-50'}`}
                             >
-                                {isSuspended ? (
+                                {isDroppedOut ? (
                                     <>
                                         <UserCircle size={14} className="text-green-500" />
                                         Activate Student
@@ -83,7 +83,7 @@ const StudentRow = ({ _id: id, name, email, studentStatus: status, studentBootca
                                 ) : (
                                     <>
                                         <UserMinus size={14} className="text-slate-400" />
-                                        Suspend
+                                        Drop Out
                                     </>
                                 )}
                             </button>

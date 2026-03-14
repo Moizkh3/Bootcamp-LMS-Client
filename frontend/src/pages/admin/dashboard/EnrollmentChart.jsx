@@ -23,8 +23,8 @@ export default function EnrollmentChart() {
 
     const chartData = enrollmentData.map((domain, index) => ({
         name: domain.name,
-        value: domain.students,
-        percentage: totalStudents > 0 ? Math.round((domain.students / totalStudents) * 100) : 0,
+        value: domain.studentsCount || 0,
+        percentage: totalStudents > 0 ? Math.round(((domain.studentsCount || 0) / totalStudents) * 100) : 0,
         color: COLORS[index % COLORS.length]
     }));
 

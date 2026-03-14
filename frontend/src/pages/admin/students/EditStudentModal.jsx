@@ -90,8 +90,7 @@ const EditStudentModal = ({ isOpen, onClose, onSave, student }) => {
                             options={[
                                 { value: 'enrolled', label: 'Active' },
                                 { value: 'completed', label: 'Graduated' },
-                                { value: 'dropout', label: 'Suspended' },
-                                { value: 'suspended', label: 'Inactive' }
+                                { value: 'dropout', label: 'Dropped Out' }
                             ]}
                         />
                     </div>

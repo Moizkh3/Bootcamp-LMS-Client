@@ -80,16 +80,16 @@ const OverallHealth = ({ domains = [], kpis }) => {
                                                 <p className="text-[10px] text-slate-400 font-medium line-clamp-1">{domain.bootcamp?.name || domain.bootcamp || 'General'}</p>
                                             </div>
                                             <div className="flex items-center gap-3">
-                                                <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${statusColor(domain.students > 0 ? 'Active' : 'Empty')}`}>
-                                                    {domain.students > 0 ? 'Active' : 'Empty'}
+                                                <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${statusColor((domain.studentsCount || 0) > 0 ? 'Active' : 'Empty')}`}>
+                                                    {(domain.studentsCount || 0) > 0 ? 'Active' : 'Empty'}
                                                 </span>
-                                                <span className="text-sm font-extrabold text-slate-800">{domain.students || 0} Students</span>
+                                                <span className="text-sm font-extrabold text-slate-800">{domain.studentsCount || 0} Students</span>
                                             </div>
                                         </div>
                                         <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
                                             <div
                                                 className="h-full rounded-full transition-all duration-700"
-                                                style={{ width: `${Math.min(100, (domain.students || 0) * 10)}%`, backgroundColor: colors[idx % colors.length] }}
+                                                style={{ width: `${Math.min(100, (domain.studentsCount || 0) * 10)}%`, backgroundColor: colors[idx % colors.length] }}
                                             />
                                         </div>
                                     </div>

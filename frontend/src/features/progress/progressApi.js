@@ -7,7 +7,7 @@ export const progressApi = createApi({
         baseUrl: BASE_URL,
         credentials: 'include',
     }),
-    tagTypes: ['Progress'],
+    tagTypes: ['Progress', 'StandupStatus'],
     endpoints: (builder) => ({
         submitStandup: builder.mutation({
             query: (data) => ({
@@ -41,6 +41,11 @@ export const progressApi = createApi({
             }),
             invalidatesTags: ['Progress', 'StandupStatus'],
         }),
+        // 4. Check if today's standup is submitted
+        getTodayStandupStatus: builder.query({
+            query: () => '/student-dashboard/is-submit-today-standup',
+            providesTags: ['StandupStatus'],
+        }),
     }),
 });
 
@@ -50,4 +55,5 @@ export const {
     useGetStudentProgressQuery,
     useGetBootcampProgressQuery,
     useReviewStandupMutation,
+    useGetTodayStandupStatusQuery,
 } = progressApi;
