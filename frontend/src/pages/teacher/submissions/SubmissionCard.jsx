@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/common/Button';
 import { useReviewSubmissionMutation } from '../../../features/teacher/teacherApi';
 import { toast } from 'react-hot-toast';
+import { ensureAbsoluteUrl } from '../../../utils/helpers';
 
 const SubmissionCard = ({ student: submission }) => {
     const navigate = useNavigate();
@@ -117,37 +118,37 @@ const SubmissionCard = ({ student: submission }) => {
                         <p className="text-[10px] font-semibold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">Links</p>
                         <div className="flex flex-col gap-1">
                             {frontendGithubUrl && (
-                                <a href={frontendGithubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-start md:justify-end gap-2 text-[var(--color-primary)] hover:text-[var(--color-primary)]/80 transition-colors text-xs font-semibold">
+                                <a href={ensureAbsoluteUrl(frontendGithubUrl)} target="_blank" rel="noopener noreferrer" className="flex items-center justify-start md:justify-end gap-2 text-[var(--color-primary)] hover:text-[var(--color-primary)]/80 transition-colors text-xs font-semibold">
                                     <span>Frontend GitHub</span>
                                     <LinkIcon size={14} />
                                 </a>
                             )}
                             {backendGithubUrl && (
-                                <a href={backendGithubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-start md:justify-end gap-2 text-[var(--color-primary)] hover:text-[var(--color-primary)]/80 transition-colors text-xs font-semibold">
+                                <a href={ensureAbsoluteUrl(backendGithubUrl)} target="_blank" rel="noopener noreferrer" className="flex items-center justify-start md:justify-end gap-2 text-[var(--color-primary)] hover:text-[var(--color-primary)]/80 transition-colors text-xs font-semibold">
                                     <span>Backend GitHub</span>
                                     <LinkIcon size={14} />
                                 </a>
                             )}
                             {deployedUrl && (
-                                <a href={deployedUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-start md:justify-end gap-2 text-[var(--color-success)] hover:text-[var(--color-success)]/80 transition-colors text-xs font-semibold">
+                                <a href={ensureAbsoluteUrl(deployedUrl)} target="_blank" rel="noopener noreferrer" className="flex items-center justify-start md:justify-end gap-2 text-[var(--color-success)] hover:text-[var(--color-success)]/80 transition-colors text-xs font-semibold">
                                     <span>Live Demo</span>
                                     <LinkIcon size={14} />
                                 </a>
                             )}
                             {behanceUrl && (
-                                <a href={behanceUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-start md:justify-end gap-2 text-[#1769ff] hover:text-[#1769ff]/80 transition-colors text-xs font-semibold">
+                                <a href={ensureAbsoluteUrl(behanceUrl)} target="_blank" rel="noopener noreferrer" className="flex items-center justify-start md:justify-end gap-2 text-[#1769ff] hover:text-[#1769ff]/80 transition-colors text-xs font-semibold">
                                     <span>Behance Project</span>
                                     <LinkIcon size={14} />
                                 </a>
                             )}
                             {figmaUrl && (
-                                <a href={figmaUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-start md:justify-end gap-2 text-[#f24e1e] hover:text-[#f24e1e]/80 transition-colors text-xs font-semibold">
+                                <a href={ensureAbsoluteUrl(figmaUrl)} target="_blank" rel="noopener noreferrer" className="flex items-center justify-start md:justify-end gap-2 text-[#f24e1e] hover:text-[#f24e1e]/80 transition-colors text-xs font-semibold">
                                     <span>Figma Design</span>
                                     <LinkIcon size={14} />
                                 </a>
                             )}
                             {submission.referenceFile && (
-                                <a href={submission.referenceFile} target="_blank" rel="noopener noreferrer" className="flex items-center justify-start md:justify-end gap-2 text-[var(--color-primary)] hover:text-[var(--color-primary)]/80 transition-colors text-xs font-semibold">
+                                <a href={ensureAbsoluteUrl(submission.referenceFile)} target="_blank" rel="noopener noreferrer" className="flex items-center justify-start md:justify-end gap-2 text-[var(--color-primary)] hover:text-[var(--color-primary)]/80 transition-colors text-xs font-semibold">
                                     <span>Submission Document</span>
                                     <FileText size={14} />
                                 </a>

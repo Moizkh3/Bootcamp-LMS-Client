@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useGetSubmissionByAssignmentQuery } from "../../../features/submission/submissionApi";
 import Breadcrumbs from "../../../components/common/Breadcrumbs";
 import Button from "../../../components/common/Button";
+import { ensureAbsoluteUrl } from "../../../utils/helpers";
 
 export default function FeedbackDetail() {
   const navigate = useNavigate();
@@ -94,8 +95,8 @@ export default function FeedbackDetail() {
               <div className="flex-1 min-w-0">
                 {submission?.frontendGithubUrl ? (
                   <>
-                    <a href={submission.frontendGithubUrl} target="_blank" rel="noreferrer" className="font-bold text-[var(--color-primary)] hover:underline truncate block">
-                      {submission.frontendGithubUrl.replace("https://", "")}
+                    <a href={ensureAbsoluteUrl(submission.frontendGithubUrl)} target="_blank" rel="noreferrer" className="font-bold text-[var(--color-primary)] hover:underline truncate block">
+                      {submission.frontendGithubUrl.replace("https://", "").replace("http://", "")}
                     </a>
                     <p className="text-xs text-[var(--color-text-muted)] font-medium mt-1 uppercase tracking-tighter">Frontend Repository</p>
                   </>
@@ -104,16 +105,16 @@ export default function FeedbackDetail() {
                 )}
                 {submission?.backendGithubUrl && (
                   <div className="mt-2 text-sm">
-                    <a href={submission.backendGithubUrl} target="_blank" rel="noreferrer" className="font-bold text-[var(--color-primary)] hover:underline truncate block">
-                      {submission.backendGithubUrl.replace("https://", "")}
+                    <a href={ensureAbsoluteUrl(submission.backendGithubUrl)} target="_blank" rel="noreferrer" className="font-bold text-[var(--color-primary)] hover:underline truncate block">
+                      {submission.backendGithubUrl.replace("https://", "").replace("http://", "")}
                     </a>
                     <p className="text-[10px] text-[var(--color-text-muted)] font-bold uppercase tracking-tighter mt-0.5">Backend Repository</p>
                   </div>
                 )}
                 {submission?.deployedUrl && (
                   <div className="mt-2 text-sm">
-                    <a href={submission.deployedUrl} target="_blank" rel="noreferrer" className="font-bold text-[var(--color-success)] hover:underline truncate block">
-                      {submission.deployedUrl.replace("https://", "")}
+                    <a href={ensureAbsoluteUrl(submission.deployedUrl)} target="_blank" rel="noreferrer" className="font-bold text-[var(--color-success)] hover:underline truncate block">
+                      {submission.deployedUrl.replace("https://", "").replace("http://", "")}
                     </a>
                     <p className="text-[10px] text-[var(--color-text-muted)] font-bold uppercase tracking-tighter mt-0.5">Deployed Application</p>
                   </div>

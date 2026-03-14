@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { AlertTriangleIcon, ClockIcon, ArrowLeftIcon, CheckCircle2, Edit3Icon } from "lucide-react";
+import { AlertTriangleIcon, ClockIcon, ArrowLeftIcon, CheckCircle2, Edit3Icon, MessageSquare } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import Breadcrumbs from "../../../components/common/Breadcrumbs";
 import Button from "../../../components/common/Button";
@@ -150,6 +150,26 @@ export default function DailyProgress() {
                     <div>
                       <p className="text-sm font-bold text-[var(--color-text-main)]">Edit Mode</p>
                       <p className="text-xs text-[var(--color-text-muted)] font-medium">You can still update your standup for this session.</p>
+                    </div>
+                  </div>
+                )}
+
+                {todayStandup?.feedback && (
+                  <div className="bg-[var(--color-success-bg)] border border-[var(--color-success)]/20 rounded-xl p-6 mb-8 relative overflow-hidden group hover:border-[var(--color-success)]/40 transition-all duration-300 shadow-sm ring-4 ring-[var(--color-success)]/5">
+                    <div className="absolute right-0 top-0 w-32 h-32 bg-[var(--color-success)]/5 rounded-full blur-2xl -mr-16 -mt-16 group-hover:bg-[var(--color-success)]/10 transition-colors" />
+                    <div className="flex items-center gap-3 mb-4 relative z-10">
+                      <div className="w-10 h-10 bg-[var(--color-success)] text-white rounded-xl flex items-center justify-center shadow-lg shadow-[var(--color-success)]/20 transition-transform duration-500 group-hover:scale-110">
+                        <MessageSquare size={20} />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-bold text-[var(--color-success)] uppercase tracking-wider">Mentor Feedback</h3>
+                        <p className="text-[10px] text-[var(--color-success)]/60 font-bold uppercase tracking-widest mt-0.5">Reviewed by Instructor</p>
+                      </div>
+                    </div>
+                    <div className="bg-white/50 backdrop-blur-sm border border-[var(--color-success)]/10 rounded-xl p-5 relative z-10 shadow-inner group-hover:bg-white/80 transition-colors">
+                      <p className="text-sm text-[var(--color-text-main)] font-medium leading-relaxed italic">
+                        "{todayStandup.feedback}"
+                      </p>
                     </div>
                   </div>
                 )}

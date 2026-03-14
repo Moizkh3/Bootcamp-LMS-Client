@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, FileText, Calendar, Link as LinkIcon, User as UserIcon } from 'lucide-react';
 import { useGetTeacherAssignmentsQuery } from '../../../features/teacher/teacherApi';
+import { ensureAbsoluteUrl } from '../../../utils/helpers';
 
 const TeacherAssignmentsPanel = ({ isOpen, onClose, teacher }) => {
     // Only fetch if panel is open and a teacher is selected
@@ -102,7 +103,7 @@ const TeacherAssignmentsPanel = ({ isOpen, onClose, teacher }) => {
                                     {assignment.documentUrl && (
                                         <div className="mt-3">
                                             <a 
-                                                href={assignment.documentUrl} 
+                                                href={ensureAbsoluteUrl(assignment.documentUrl)} 
                                                 target="_blank" 
                                                 rel="noreferrer"
                                                 className="inline-flex items-center gap-1 text-xs font-bold text-[#1111d4] hover:underline"

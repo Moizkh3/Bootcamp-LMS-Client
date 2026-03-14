@@ -14,7 +14,8 @@ import {
     LogOut,
     CheckSquare,
     BookOpen,
-    MessageSquare
+    MessageSquare,
+    History
 } from 'lucide-react';
 import logo from '../../assets/images/logo.png';
 
@@ -47,6 +48,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     const studentMenuItems = [
         { name: 'Dashboard', href: '/student', icon: LayoutDashboard },
         { name: 'My Progress', href: '/student/progress', icon: LineChart },
+        { name: 'History', href: '/student/progress/history', icon: History },
         { name: 'Assignments', href: '/student/assignments', icon: Layers },
         { name: 'Feedback', href: '/student/feedback', icon: MessageSquare },
     ];
@@ -120,7 +122,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                         return (
                             <NavLink
                                 to={item.href}
-                                end={item.href === '/' || item.name === 'Dashboard' || item.name === 'Assignments'}
+                                end={item.href === '/' || item.name === 'Dashboard' || item.name === 'Assignments' || item.name === 'My Progress'}
                                 key={item.name}
                                 onClick={() => {
                                     if (window.innerWidth < 768) setIsSidebarOpen(false);

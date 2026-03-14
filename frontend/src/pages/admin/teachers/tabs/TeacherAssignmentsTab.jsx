@@ -1,6 +1,7 @@
 import React from 'react';
 import { FileText, Calendar, Link as LinkIcon, Briefcase, Layers } from 'lucide-react';
 import { useGetTeacherAssignmentsQuery } from '../../../../features/teacher/teacherApi';
+import { ensureAbsoluteUrl } from '../../../../utils/helpers';
 
 export default function TeacherAssignmentsTab({ teacherId }) {
     const { data: assignmentsResponse, isLoading } = useGetTeacherAssignmentsQuery(
@@ -101,7 +102,7 @@ export default function TeacherAssignmentsTab({ teacherId }) {
                         {assignment.documentUrl && (
                             <div className="mt-4 flex justify-end">
                                 <a 
-                                    href={assignment.documentUrl} 
+                                    href={ensureAbsoluteUrl(assignment.documentUrl)} 
                                     target="_blank" 
                                     rel="noreferrer"
                                     className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1111d4] hover:underline"

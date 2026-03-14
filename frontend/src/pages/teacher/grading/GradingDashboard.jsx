@@ -17,6 +17,7 @@ import Button from '../../../components/common/Button';
 import GradingModal from './GradingModal';
 import { useGetSubmissionByIdQuery, useReviewSubmissionMutation } from '../../../features/teacher/teacherApi';
 import { toast } from 'react-hot-toast';
+import { ensureAbsoluteUrl } from '../../../utils/helpers';
 
 const GradingDashboard = () => {
     const { id } = useParams();
@@ -147,7 +148,7 @@ const GradingDashboard = () => {
                                     variant="secondary"
                                     size="md"
                                     icon={<Github size={18} />}
-                                    onClick={() => window.open(submission.frontendGithubUrl, '_blank')}
+                                    onClick={() => window.open(ensureAbsoluteUrl(submission.frontendGithubUrl), '_blank')}
                                 >
                                     Frontend Repo
                                 </Button>
@@ -157,7 +158,7 @@ const GradingDashboard = () => {
                                     variant="secondary"
                                     size="md"
                                     icon={<Github size={18} />}
-                                    onClick={() => window.open(submission.backendGithubUrl, '_blank')}
+                                    onClick={() => window.open(ensureAbsoluteUrl(submission.backendGithubUrl), '_blank')}
                                 >
                                     Backend Repo
                                 </Button>
@@ -185,7 +186,7 @@ const GradingDashboard = () => {
                             </h4>
                             <div className="space-y-3">
                                 {submission.deployedUrl && (
-                                    <div className="bg-[var(--color-surface)] rounded-xl p-5 border border-[var(--color-border)] shadow-sm flex items-center gap-4 group cursor-pointer hover:border-[var(--color-primary)] hover:shadow-lg transition-all" onClick={() => window.open(submission.deployedUrl, '_blank')}>
+                                    <div className="bg-[var(--color-surface)] rounded-xl p-5 border border-[var(--color-border)] shadow-sm flex items-center gap-4 group cursor-pointer hover:border-[var(--color-primary)] hover:shadow-lg transition-all" onClick={() => window.open(ensureAbsoluteUrl(submission.deployedUrl), '_blank')}>
                                         <div className="p-4 rounded-xl bg-[var(--color-success-bg)] text-[var(--color-success)] group-hover:scale-110 transition-transform">
                                             <ExternalLink size={24} />
                                         </div>
@@ -196,7 +197,7 @@ const GradingDashboard = () => {
                                     </div>
                                 )}
                                 {submission.referenceFile && (
-                                    <div className="bg-[var(--color-surface)] rounded-xl p-5 border border-[var(--color-border)] shadow-sm flex items-center gap-4 group cursor-pointer hover:border-[var(--color-primary)] hover:shadow-lg transition-all" onClick={() => window.open(submission.referenceFile, '_blank')}>
+                                    <div className="bg-[var(--color-surface)] rounded-xl p-5 border border-[var(--color-border)] shadow-sm flex items-center gap-4 group cursor-pointer hover:border-[var(--color-primary)] hover:shadow-lg transition-all" onClick={() => window.open(ensureAbsoluteUrl(submission.referenceFile), '_blank')}>
                                         <div className="p-4 rounded-xl bg-[var(--color-info-bg)] text-[var(--color-info)] group-hover:scale-110 transition-transform">
                                             <FileText size={24} />
                                         </div>
