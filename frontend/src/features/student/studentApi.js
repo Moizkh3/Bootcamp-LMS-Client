@@ -1,24 +1,17 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BASE_URL } from '../../utils/constants';
+import { authApi } from '../auth/authServiceApi';
 
-export const studentApi = createApi({
-    reducerPath: 'studentApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: `${BASE_URL}/student-dashboard`,
-        credentials: 'include',
-    }),
-    tagTypes: ['StudentStats', 'StudentAssignments'],
+export const studentApi = authApi.injectEndpoints({
     endpoints: (builder) => ({
         // 1. Get Student Stats
         getStudentStats: builder.query({
-            query: () => '/stats',
-            providesTags: ['StudentStats'],
+            query: () => '/student-dashboard/stats',
+            providesTags: ['Stats'],
         }),
 
         // 2. Get Student Assignments
         getStudentAssignments: builder.query({
-            query: () => '/assignments',
-            providesTags: ['StudentAssignments'],
+            query: () => '/student-dashboard/assignments',
+            providesTags: ['Assignment'],
         }),
     }),
 });

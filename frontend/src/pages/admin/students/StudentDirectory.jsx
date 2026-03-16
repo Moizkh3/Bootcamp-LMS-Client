@@ -13,6 +13,7 @@ import {
     useUpdateUserMutation
 } from '../../../features/user/userApi';
 import { toast } from 'react-hot-toast';
+import LoadingScreen from '../../../components/common/LoadingScreen';
 
 
 const StudentDirectory = () => {
@@ -68,7 +69,7 @@ const StudentDirectory = () => {
         }
     };
 
-    if (isLoading) return <div className="flex items-center justify-center min-h-[400px]">Loading students...</div>;
+    if (isLoading) return <LoadingScreen variant="contained" text="Loading students..." />;
     if (error) return <div className="text-red-500 text-center py-10">Error loading students: {error?.data?.message || error.message}</div>;
 
     return (

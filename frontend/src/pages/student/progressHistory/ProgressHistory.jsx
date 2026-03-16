@@ -16,6 +16,7 @@ import Breadcrumbs from "../../../components/common/Breadcrumbs";
 import Button from "../../../components/common/Button";
 import Input from "../../../components/common/Input";
 import StatCard from "../../../components/common/StatCard";
+import LoadingScreen from "../../../components/common/LoadingScreen";
 
 import { useGetStudentProgressQuery } from "../../../features/progress/progressApi";
 import { useGetStudentStatsQuery } from "../../../features/student/studentApi";
@@ -35,7 +36,7 @@ export default function ProgressHistory() {
     );
 
     if (progressLoading || statsLoading) {
-        return <div className="p-8">Loading history...</div>;
+        return <LoadingScreen variant="contained" text="Loading history..." />;
     }
 
     return (

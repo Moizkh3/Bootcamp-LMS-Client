@@ -1,13 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BASE_URL } from '../../utils/constants';
+import { authApi } from '../auth/authServiceApi';
 
-export const submissionApi = createApi({
-    reducerPath: 'submissionApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: BASE_URL,
-        credentials: 'include',
-    }),
-    tagTypes: ['Submissions'],
+export const submissionApi = authApi.injectEndpoints({
     endpoints: (builder) => ({
         submitAssignment: builder.mutation({
             query: (data) => {
@@ -28,7 +21,7 @@ export const submissionApi = createApi({
                     body: formData,
                 };
             },
-            invalidatesTags: ['Submissions'],
+            invalidatesTags: ['Submission', 'Stats', 'Assignment'],
         }),
         getAllSubmissions: builder.query({
             query: (params = {}) => {
@@ -39,14 +32,14 @@ export const submissionApi = createApi({
                 });
                 return `/submission${queryString}`;
             },
-            providesTags: ['Submissions'],
+            providesTags: ['Submission'],
         }),
         getSubmissionByAssignment: builder.query({
             query: (assignmentId) => ({
                 url: '/submission',
                 params: { assignment: assignmentId }
             }),
-            providesTags: ['Submissions'],
+            providesTags: ['Submission'],
         }),
     }),
 });

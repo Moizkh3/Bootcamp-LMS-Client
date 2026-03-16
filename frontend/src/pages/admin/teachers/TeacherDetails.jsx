@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import Breadcrumbs from '../../../components/common/Breadcrumbs';
 import Button from '../../../components/common/Button';
+import LoadingScreen from '../../../components/common/LoadingScreen';
 import EditTeacherModal from './EditTeacherModal';
 import DeleteConfirmationModal from '../../../components/common/DeleteConfirmationModal';
 import { 
@@ -50,7 +51,7 @@ export default function TeacherDetails() {
         { id: 'bootcamps', label: 'Assigned Bootcamps' }
     ];
 
-    if (isLoading) return <div className="flex items-center justify-center min-h-[400px]">Loading teacher details...</div>;
+    if (isLoading) return <LoadingScreen variant="contained" text="Loading teacher details..." />;
 
     if (!teacher) {
         return (

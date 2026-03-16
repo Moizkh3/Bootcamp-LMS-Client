@@ -3,6 +3,7 @@ import { Clock, Calendar, Eye, Search, Filter, BookOpen, ChevronRight, Clipboard
 import { useNavigate } from "react-router-dom";
 import Breadcrumbs from "../../../components/common/Breadcrumbs";
 import Button from "../../../components/common/Button";
+import LoadingScreen from "../../../components/common/LoadingScreen";
 import { useGetStudentAssignmentsQuery } from "../../../features/student/studentApi";
 
 
@@ -73,7 +74,7 @@ export default function MyAssignments() {
   }
 
   if (isLoading) {
-    return <div className="p-8">Loading assignments...</div>;
+    return <LoadingScreen variant="contained" text="Loading assignments..." />;
   }
 
   return (
@@ -185,6 +186,11 @@ export default function MyAssignments() {
                     <span className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-lg shadow-sm border ${a.statusClass}`}>
                       {a.statusLabel}
                     </span>
+                    {a.status === 'Closed' && (
+                      <span className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-lg bg-gray-100 text-gray-600 border border-gray-200 shadow-sm">
+                        CLOSED
+                      </span>
+                    )}
                     {a.grade !== null && a.grade !== undefined && (
                       <span className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-lg bg-amber-50 text-amber-600 border border-amber-100 shadow-sm flex items-center gap-1">
                         ⭐ {a.grade}

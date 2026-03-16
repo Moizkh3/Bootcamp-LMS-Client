@@ -6,8 +6,8 @@ import Breadcrumbs from '../../../components/common/Breadcrumbs';
 import StandupFeedbackModal from './StandupFeedbackModal';
 import { useGetTeacherStatsQuery } from '../../../features/teacher/teacherApi';
 import { useGetBootcampProgressQuery, useReviewStandupMutation } from '../../../features/progress/progressApi';
-import { Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import LoadingScreen from '../../../components/common/LoadingScreen';
 
 const StandupsDashboard = () => {
     const [view, setView] = useState('card');
@@ -135,10 +135,7 @@ const StandupsDashboard = () => {
             />
 
             {statsLoading || progressLoading ? (
-                <div className="flex flex-col items-center justify-center py-20 bg-[var(--color-surface)] rounded-xl border border-[var(--color-border)] shadow-sm">
-                    <Loader2 size={32} className="animate-spin text-[var(--color-primary)] mb-4" />
-                    <p className="text-[var(--color-text-muted)] font-medium">Loading standups...</p>
-                </div>
+                <LoadingScreen variant="contained" text="Loading standups..." />
             ) : view === 'card' ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {sortedStandups.length > 0 ? (

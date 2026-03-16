@@ -17,6 +17,7 @@ import {
     useDeleteBootcampMutation
 } from '../../../features/bootcamp/bootcampApi';
 import { toast } from 'react-hot-toast';
+import LoadingScreen from '../../../components/common/LoadingScreen';
 
 
 
@@ -69,7 +70,7 @@ export default function BootcampList() {
         }
     };
 
-    if (isLoading) return <div className="flex items-center justify-center min-h-[400px]">Loading bootcamps...</div>;
+    if (isLoading) return <LoadingScreen variant="contained" text="Loading bootcamps..." />;
     if (error) return <div className="text-red-500 text-center py-10">Error loading bootcamps: {error?.data?.message || error.message}</div>;
 
     return (

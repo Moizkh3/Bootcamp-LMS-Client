@@ -5,6 +5,7 @@ import Breadcrumbs from '../../../components/common/Breadcrumbs';
 import Button from '../../../components/common/Button';
 import { format } from 'date-fns';
 import { progressApi } from '../../../features/progress/progressApi';
+import LoadingScreen from '../../../components/common/LoadingScreen';
 
 const adminProgressApi = progressApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -215,9 +216,9 @@ export default function AdminStandups() {
             {view === 'card' ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {isLoading ? (
-                        Array.from({ length: 8 }).map((_, i) => (
-                            <div key={i} className="bg-white rounded-2xl border border-[#e2e8f0] p-5 animate-pulse h-48" />
-                        ))
+                         <div className="col-span-full">
+                            <LoadingScreen variant="contained" text="Loading standups..." />
+                         </div>
                     ) : filteredProgress.length > 0 ? (
                         filteredProgress.map(p => (
                             <div key={p._id} className="bg-white rounded-2xl border border-[#e2e8f0] p-5 shadow-sm hover:shadow-md hover:border-[var(--color-primary)]/30 transition-all">
@@ -276,11 +277,8 @@ export default function AdminStandups() {
                             <tbody className="divide-y divide-[#e2e8f0]">
                                 {isLoading ? (
                                     <tr>
-                                        <td colSpan="6" className="px-6 py-12 text-center text-[#64748b]">
-                                            <div className="flex flex-col items-center gap-2">
-                                                <div className="w-8 h-8 border-4 border-[var(--color-primary)] border-t-transparent rounded-full animate-spin"></div>
-                                                <span className="font-medium">Loading standups...</span>
-                                            </div>
+                                        <td colSpan="6" className="px-6 py-12">
+                                            <LoadingScreen variant="contained" text="Loading standups..." />
                                         </td>
                                     </tr>
                                 ) : filteredProgress.length > 0 ? (

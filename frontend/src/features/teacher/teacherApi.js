@@ -1,120 +1,90 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BASE_URL } from '../../utils/constants';
-import { studentApi } from '../student/studentApi';
-import { submissionApi } from '../submission/submissionApi';
+import { authApi } from '../auth/authServiceApi';
 
-export const teacherApi = createApi({
-    reducerPath: 'teacherApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: `${BASE_URL}/teacher`,
-        credentials: 'include',
-    }),
-    tagTypes: ['TeacherStats', 'TeacherAssignment', 'TeacherSubmission'],
+export const teacherApi = authApi.injectEndpoints({
     endpoints: (builder) => ({
         // 1. Get Teacher Stats
         getTeacherStats: builder.query({
-            query: () => '/stats',
-            providesTags: ['TeacherStats'],
+            query: () => '/teacher/stats',
+            providesTags: ['Stats'],
         }),
 
         // 2. Get All Assignments
         getTeacherAssignments: builder.query({
-            query: () => '/get-assignments',
-            providesTags: ['TeacherAssignment'],
+            query: () => '/teacher/get-assignments',
+            providesTags: ['Assignment'],
         }),
 
         // 3. Create Assignment
         createTeacherAssignment: builder.mutation({
             query: (formData) => ({
-                url: '/create-assignment',
+                url: '/teacher/create-assignment',
                 method: 'POST',
                 body: formData,
             }),
-            invalidatesTags: ['TeacherAssignment', 'TeacherStats'],
+            invalidatesTags: ['Assignment', 'Stats'],
         }),
 
         // 4. Update Assignment
         updateTeacherAssignment: builder.mutation({
             query: ({ id, ...data }) => ({
-                url: `/update-assignment/${id}`,
+                url: `/teacher/update-assignment/${id}`,
                 method: 'PUT',
                 body: data,
             }),
-            invalidatesTags: ['TeacherAssignment', 'TeacherStats'],
+            invalidatesTags: ['Assignment', 'Stats'],
         }),
 
         // 5. Delete Assignment
         deleteTeacherAssignment: builder.mutation({
             query: (id) => ({
-                url: `/delete-assignment/${id}`,
+                url: `/teacher/delete-assignment/${id}`,
                 method: 'DELETE',
             }),
-            invalidatesTags: ['TeacherAssignment', 'TeacherStats'],
+            invalidatesTags: ['Assignment', 'Stats'],
         }),
 
         // 6. Review Submission
         reviewSubmission: builder.mutation({
             query: ({ submissionId, ...reviewData }) => ({
-                url: `/review-submission/${submissionId}`,
+                url: `/teacher/review-submission/${submissionId}`,
                 method: 'POST',
                 body: reviewData,
             }),
-            invalidatesTags: ['TeacherSubmission', 'TeacherStats'],
-            async onQueryStarted(args, { dispatch, queryFulfilled }) {
-                try {
-                    await queryFulfilled;
-                    // Invalidate student and submission APIs to reflect feedback everywhere
-                    dispatch(studentApi.util.invalidateTags(['StudentAssignments', 'StudentStats']));
-                    dispatch(submissionApi.util.invalidateTags(['Submissions']));
-                } catch (err) { 
-                    console.error("Cross-API Invalidation Failed (Assignment):", err);
-                }
-            },
+            invalidatesTags: ['Submission', 'Stats', 'Assignment'],
         }),
 
         // 7. Get Submissions for an assignment
         getAssignmentSubmissions: builder.query({
-            query: (assignmentId) => `/get-assignment-submissions/${assignmentId}`,
-            providesTags: ['TeacherSubmission'],
+            query: (assignmentId) => `/teacher/get-assignment-submissions/${assignmentId}`,
+            providesTags: ['Submission'],
         }),
 
         // 8. Get All Submissions for teacher
         getTeacherSubmissions: builder.query({
-            query: () => '/get-submissions',
-            providesTags: ['TeacherSubmission'],
+            query: () => '/teacher/get-submissions',
+            providesTags: ['Submission'],
         }),
 
         // 9. Get Specific Submission
         getSubmissionById: builder.query({
-            query: (id) => `/get-submission/${id}`,
-            providesTags: ['TeacherSubmission'],
+            query: (id) => `/teacher/get-submission/${id}`,
+            providesTags: ['Submission'],
         }),
         getTeacherStudents: builder.query({
-            query: () => '/students',
-            providesTags: ['TeacherSubmission'], // Reusing submission tag or could add 'TeacherStudent'
+            query: () => '/teacher/students',
+            providesTags: ['User'],
         }),
         getStudentProgress: builder.query({
-            query: (studentId) => `/student-progress/${studentId}`,
-            providesTags: ['TeacherSubmission'],
+            query: (studentId) => `/teacher/student-progress/${studentId}`,
+            providesTags: ['Progress'],
         }),
         giveStandupFeedback: builder.mutation({
             query: ({ standupId, ...data }) => ({
-                url: `/standup-feedback/${standupId}`,
+                url: `/teacher/standup-feedback/${standupId}`,
                 method: 'POST',
                 body: data,
             }),
-            invalidatesTags: ['TeacherSubmission', 'TeacherStats'],
-            async onQueryStarted(args, { dispatch, queryFulfilled }) {
-                try {
-                    const { progressApi } = await import('../progress/progressApi');
-                    const { studentApi } = await import('../student/studentApi');
-                    await queryFulfilled;
-                    // Invalidate student-side progress and stats
-                    dispatch(progressApi.util.invalidateTags(['Progress', 'StandupStatus']));
-                    dispatch(studentApi.util.invalidateTags(['StudentStats']));
-                } catch (err) {
-                }
-            },
+            invalidatesTags: ['Progress', 'Stats', 'User'],
         }),
     }),
 });

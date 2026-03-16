@@ -12,6 +12,7 @@ import { useGetAllDomainsQuery } from '../../../features/domain/domainApi';
 import Breadcrumbs from '../../../components/common/Breadcrumbs';
 import toast from 'react-hot-toast';
 import DeleteConfirmationModal from '../../../components/common/DeleteConfirmationModal';
+import LoadingScreen from '../../../components/common/LoadingScreen';
 
 export default function Announcements() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -129,7 +130,7 @@ export default function Announcements() {
 
             <div className="space-y-4">
                 {isLoading ? (
-                    <div className="py-20 text-center text-[#64748b]">Loading announcements...</div>
+                    <LoadingScreen variant="contained" text="Loading announcements..." />
                 ) : filteredAnnouncements.length > 0 ? (
                     filteredAnnouncements.map((a) => (
                         <div key={a._id} className="bg-white border border-[#e2e8f0] rounded-2xl p-6 shadow-sm hover:border-[#cbd5e1] transition-all group">

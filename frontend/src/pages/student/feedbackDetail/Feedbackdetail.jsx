@@ -4,6 +4,7 @@ import { useGetSubmissionByAssignmentQuery } from "../../../features/submission/
 import Breadcrumbs from "../../../components/common/Breadcrumbs";
 import Button from "../../../components/common/Button";
 import { ensureAbsoluteUrl } from "../../../utils/helpers";
+import LoadingScreen from "../../../components/common/LoadingScreen";
 
 export default function FeedbackDetail() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function FeedbackDetail() {
   const submission = submissions.length > 0 ? [...submissions].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0] : null;
 
   if (submissionsLoading) {
-    return <div className="p-8 text-center text-slate-500 font-medium">Loading feedback details...</div>;
+    return <LoadingScreen text="Loading feedback details..." />;
   }
 
   return (

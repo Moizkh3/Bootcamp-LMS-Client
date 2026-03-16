@@ -1,14 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BASE_URL } from '../../utils/constants';
-import { bootcampApi } from '../bootcamp/bootcampApi';
+import { authApi } from '../auth/authServiceApi';
 
-export const domainApi = createApi({
-    reducerPath: 'domainApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: BASE_URL,
-        credentials: 'include',
-    }),
-    tagTypes: ['Domain'],
+export const domainApi = authApi.injectEndpoints({
     endpoints: (builder) => ({
         // 1. Get All Domains
         getAllDomains: builder.query({
@@ -23,13 +15,7 @@ export const domainApi = createApi({
                 method: 'POST',
                 body: newDomain,
             }),
-            invalidatesTags: ['Domain'],
-            async onQueryStarted(args, { dispatch, queryFulfilled }) {
-                try {
-                    await queryFulfilled;
-                    dispatch(bootcampApi.util.invalidateTags(['Bootcamp']));
-                } catch (err) { }
-            },
+            invalidatesTags: ['Domain', 'Bootcamp', 'Stats'],
         }),
 
         // 3. Edit Domain
@@ -39,13 +25,7 @@ export const domainApi = createApi({
                 method: 'PUT',
                 body: updatedDomain,
             }),
-            invalidatesTags: ['Domain'],
-            async onQueryStarted(args, { dispatch, queryFulfilled }) {
-                try {
-                    await queryFulfilled;
-                    dispatch(bootcampApi.util.invalidateTags(['Bootcamp']));
-                } catch (err) { }
-            },
+            invalidatesTags: ['Domain', 'Bootcamp'],
         }),
 
         // 4. Get Domain by ID
@@ -60,13 +40,7 @@ export const domainApi = createApi({
                 url: `/domain/delete/${id}`,
                 method: 'DELETE',
             }),
-            invalidatesTags: ['Domain'],
-            async onQueryStarted(args, { dispatch, queryFulfilled }) {
-                try {
-                    await queryFulfilled;
-                    dispatch(bootcampApi.util.invalidateTags(['Bootcamp']));
-                } catch (err) { }
-            },
+            invalidatesTags: ['Domain', 'Bootcamp'],
         }),
     }),
 });

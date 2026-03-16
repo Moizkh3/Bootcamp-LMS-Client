@@ -5,9 +5,9 @@ import {
     ChevronRight,
     Clock,
     X,
-    Loader2,
     AlertCircle
 } from 'lucide-react';
+import LoadingScreen from '../../../components/common/LoadingScreen';
 import Breadcrumbs from '../../../components/common/Breadcrumbs';
 import Select from '../../../components/common/Select';
 import Input from '../../../components/common/Input';
@@ -124,10 +124,7 @@ const GradingList = () => {
             {/* Submissions List */}
             <div className="bg-[var(--color-surface)] rounded-2xl border border-[var(--color-border)] shadow-sm overflow-hidden">
                 {isLoading ? (
-                    <div className="py-24 flex flex-col items-center justify-center">
-                        <Loader2 size={40} className="animate-spin text-[var(--color-primary)] mb-4" />
-                        <p className="text-[var(--color-text-muted)] font-bold uppercase tracking-widest text-xs">Fetching Data...</p>
-                    </div>
+                    <LoadingScreen variant="contained" text="Fetching Data..." />
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">

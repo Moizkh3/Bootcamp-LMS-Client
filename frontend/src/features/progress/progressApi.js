@@ -1,13 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BASE_URL } from '../../utils/constants';
+import { authApi } from '../auth/authServiceApi';
 
-export const progressApi = createApi({
-    reducerPath: 'progressApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: BASE_URL,
-        credentials: 'include',
-    }),
-    tagTypes: ['Progress', 'StandupStatus'],
+export const progressApi = authApi.injectEndpoints({
     endpoints: (builder) => ({
         submitStandup: builder.mutation({
             query: (data) => ({
@@ -15,7 +8,20 @@ export const progressApi = createApi({
                 method: 'POST',
                 body: data,
             }),
-            invalidatesTags: ['Progress', 'StandupStatus'],
+            invalidatesTags: ['Progress', 'Stats'],
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                const patchResult = dispatch(
+                    progressApi.util.updateQueryData('getTodayStandupStatus', undefined, (draft) => {
+                        // Optimistically set today's status to submitted
+                        return { isSubmitted: true };
+                    })
+                );
+                try {
+                    await queryFulfilled;
+                } catch {
+                    patchResult.undo();
+                }
+            },
         }),
         getStudentProgress: builder.query({
             query: () => '/progress/my-progress',
@@ -31,7 +37,7 @@ export const progressApi = createApi({
                 method: 'PUT',
                 body: data,
             }),
-            invalidatesTags: ['Progress', 'StandupStatus'],
+            invalidatesTags: ['Progress'],
         }),
         reviewStandup: builder.mutation({
             query: ({ id, ...data }) => ({
@@ -39,12 +45,12 @@ export const progressApi = createApi({
                 method: 'PUT',
                 body: data,
             }),
-            invalidatesTags: ['Progress', 'StandupStatus'],
+            invalidatesTags: ['Progress', 'Stats'],
         }),
         // 4. Check if today's standup is submitted
         getTodayStandupStatus: builder.query({
             query: () => '/student-dashboard/is-submit-today-standup',
-            providesTags: ['StandupStatus'],
+            providesTags: ['Progress'],
         }),
     }),
 });

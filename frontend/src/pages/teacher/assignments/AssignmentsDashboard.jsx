@@ -1,4 +1,5 @@
-import { CheckSquare, Loader2, AlertCircle } from 'lucide-react';
+import { CheckSquare, AlertCircle } from 'lucide-react';
+import LoadingScreen from '../../../components/common/LoadingScreen';
 import Breadcrumbs from '../../../components/common/Breadcrumbs';
 import AssignmentHeader from './AssignmentHeader';
 import AssignmentsFilters from './AssignmentsFilters';
@@ -101,10 +102,7 @@ const AssignmentsDashboard = () => {
             />
 
             {isLoading ? (
-                <div className="flex flex-col items-center justify-center min-h-[400px] bg-[var(--color-surface)] rounded-xl border border-[var(--color-border)]">
-                    <Loader2 size={32} className="animate-spin text-[var(--color-primary)] mb-4" />
-                    <p className="text-[var(--color-text-muted)] font-bold uppercase tracking-widest text-xs">Fetching assignments...</p>
-                </div>
+                <LoadingScreen variant="contained" text="Fetching assignments..." />
             ) : (
                 <AssignmentsTable
                     assignments={filteredAssignments}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Bell, ChevronDown, Loader2, AlertCircle } from 'lucide-react';
+import { Bell, ChevronDown, AlertCircle } from 'lucide-react';
+import LoadingScreen from '../../../components/common/LoadingScreen';
 import SubmissionFilters from './SubmissionFilters';
 import SubmissionList from './SubmissionList';
 import SubmissionPagination from './SubmissionPagination';
@@ -107,10 +108,7 @@ const SubmissionsDashboard = () => {
             />
 
             {isLoading ? (
-                <div className="flex flex-col items-center justify-center min-h-[400px] bg-[var(--color-surface)] rounded-xl border border-[var(--color-border)]">
-                    <Loader2 size={32} className="animate-spin text-[var(--color-primary)] mb-4" />
-                    <p className="text-[var(--color-text-muted)] font-bold uppercase tracking-widest text-xs">Loading Submissions...</p>
-                </div>
+                <LoadingScreen variant="contained" text="Loading Submissions..." />
             ) : (
                 <>
                     <SubmissionList submissions={paginatedSubmissions} />

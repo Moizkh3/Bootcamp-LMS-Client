@@ -5,12 +5,13 @@ import StatCard from './StatCard';
 import ActivityLogs from './ActivityLogs';
 import EnrollmentChart from './EnrollmentChart';
 import { useGetKpisQuery } from '../../../features/admin/adminApi';
+import LoadingScreen from '../../../components/common/LoadingScreen';
 
 export default function Dashboard() {
     const navigate = useNavigate();
     const { data: kpiResponse, isLoading, error } = useGetKpisQuery();
 
-    if (isLoading) return <div className="flex items-center justify-center h-full">Loading...</div>;
+    if (isLoading) return <LoadingScreen variant="contained" text="Loading dashboard..." />;
     if (error) return <div className="text-red-500">Error loading dashboard: {error?.data?.message || error.message}</div>;
 
     const kpis = kpiResponse?.data || {};

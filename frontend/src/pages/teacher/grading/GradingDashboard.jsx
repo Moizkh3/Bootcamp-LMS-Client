@@ -7,13 +7,12 @@ import {
     CheckCircle2,
     XCircle,
     GraduationCap,
-    Loader2,
-    AlertCircle,
     ExternalLink,
     Star
 } from 'lucide-react';
 import Breadcrumbs from '../../../components/common/Breadcrumbs';
 import Button from '../../../components/common/Button';
+import LoadingScreen from '../../../components/common/LoadingScreen';
 import GradingModal from './GradingModal';
 import { useGetSubmissionByIdQuery, useReviewSubmissionMutation } from '../../../features/teacher/teacherApi';
 import { toast } from 'react-hot-toast';
@@ -38,12 +37,7 @@ const GradingDashboard = () => {
     }, [submissionResponse]);
 
     if (isLoading) {
-        return (
-            <div className="flex flex-col items-center justify-center min-h-[400px]">
-                <Loader2 size={40} className="animate-spin text-[var(--color-primary)] mb-4" />
-                <p className="text-[var(--color-text-muted)] font-bold uppercase tracking-widest text-xs">Loading Submission...</p>
-            </div>
-        );
+        return <LoadingScreen variant="contained" text="Loading Submission..." />;
     }
 
     if (error || !submissionResponse?.data) {

@@ -1,17 +1,10 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BASE_URL } from '../../utils/constants';
+import { authApi } from '../auth/authServiceApi';
 
-export const userApi = createApi({
-    reducerPath: 'userApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: BASE_URL,
-        credentials: 'include',
-    }),
-    tagTypes: ['User'],
+export const userApi = authApi.injectEndpoints({
     endpoints: (builder) => ({
         // 1. Get Users by Role (Simple)
         getUsersByRole: builder.query({
-            query: (role) => `/user/role-users?role=${role}`,
+            query: ({ role, search }) => `/user/role-users?role=${role}${search ? `&search=${search}` : ''}`,
             providesTags: ['User'],
         }),
 

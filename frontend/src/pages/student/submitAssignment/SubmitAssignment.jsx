@@ -18,6 +18,7 @@ import Input from "../../../components/common/Input";
 import { useSubmitAssignmentMutation } from "../../../features/submission/submissionApi";
 import { useGetAssignmentByIdQuery } from "../../../features/assignment/assignmentApi";
 import toast from "react-hot-toast";
+import LoadingScreen from "../../../components/common/LoadingScreen";
 
 export default function SubmitAssignment() {
     const navigate = useNavigate();
@@ -61,6 +62,10 @@ export default function SubmitAssignment() {
         }
     };
 
+    if (isLoadingAssignment) {
+        return <LoadingScreen text="Loading assignment details..." />;
+    }
+
     return (
         <div className="p-4 sm:p-6 md:p-8 bg-[var(--color-background)] min-h-screen">
             <Breadcrumbs />
@@ -87,11 +92,7 @@ export default function SubmitAssignment() {
                     </p>
                 </div>
 
-                {isLoadingAssignment ? (
-                    <div className="flex items-center justify-center py-20">
-                        <Loader2 size={40} className="animate-spin text-[var(--color-primary)]" />
-                    </div>
-                ) : isSuccess ? (
+                {isSuccess ? (
                     <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-8 sm:p-12 text-center shadow-xl animate-in zoom-in duration-500">
                         <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[var(--color-success-bg)] text-[var(--color-success)] rounded-full flex items-center justify-center mx-auto mb-6">
                             <CheckCircle2 size={32} />

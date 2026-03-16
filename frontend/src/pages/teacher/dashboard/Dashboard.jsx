@@ -24,6 +24,7 @@ import CreateAssignmentModal from '../assignments/CreateAssignmentModal';
 import AnnouncementModal from './AnnouncementModal';
 import RecentActivityModal from './RecentActivityModal';
 import Button from '../../../components/common/Button';
+import LoadingScreen from '../../../components/common/LoadingScreen';
 
 const TeacherDashboard = () => {
     const navigate = useNavigate();
@@ -122,24 +123,40 @@ const TeacherDashboard = () => {
 
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                {stats.map((stat, idx) => (
-                    <StatCard key={idx} {...stat} loading={statsLoading} />
-                ))}
+                {statsLoading ? (
+                    <div className="col-span-1 md:col-span-3">
+                        <LoadingScreen variant="contained" text="Loading dashboard stats..." />
+                    </div>
+                ) : (
+                    stats.map((stat, idx) => (
+                        <StatCard key={idx} {...stat} loading={statsLoading} />
+                    ))
+                )}
             </div>
 
             {announcements.length > 0 && (
                 <div className="mb-6">
                     <h2 className="text-xl font-bold text-[var(--color-text-main)] mb-4">Recent Announcements</h2>
                     <div className="space-y-4">
-                        {announcements.map((a, i) => (
-                            <div key={i} className="p-4 bg-[var(--color-info-bg)] border border-[var(--color-info)] rounded-xl shadow-sm">
-                                <div className="flex justify-between items-start mb-1">
-                                    <h3 className="text-[var(--color-text-main)] font-bold">{a.title}</h3>
-                                    <span className="text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider font-bold">
-                                        {new Date(a.createdAt).toLocaleDateString()}
+                        {announcements.map((ann, i) => (
+                            <div key={i} className="p-4 bg-[var(--color-info-bg)] border border-[var(--color-info)]/30 rounded-xl shadow-sm">
+                                <div className="flex items-center gap-2 mb-2 flex-wrap">
+                                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${
+                                        ann.creatorRole === 'admin'
+                                            ? 'bg-purple-100 text-purple-700'
+                                            : 'bg-blue-100 text-blue-700'
+                                    }`}>
+                                        {ann.creatorRole === 'admin' ? '🛡️ Admin' : '🎓 Mentor'}
+                                    </span>
+                                    {(ann.creatorName || ann.createdBy?.name) && (
+                                        <span className="text-[10px] text-[var(--color-text-muted)] font-bold">— {ann.creatorName || ann.createdBy?.name}</span>
+                                    )}
+                                    <span className="text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider font-bold ml-auto">
+                                        {new Date(ann.createdAt).toLocaleDateString()}
                                     </span>
                                 </div>
-                                <p className="text-[var(--color-text-muted)] text-sm">{a.description}</p>
+                                <h3 className="text-[var(--color-text-main)] font-bold text-sm mb-1">{ann.title}</h3>
+                                <p className="text-[var(--color-text-muted)] text-xs leading-relaxed">{ann.description}</p>
                             </div>
                         ))}
                     </div>

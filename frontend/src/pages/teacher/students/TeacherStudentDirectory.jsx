@@ -7,6 +7,7 @@ import Button from '../../../components/common/Button';
 import BulkUploadModal from '../../admin/students/BulkUploadModal';
 import AddStudentModal from '../../admin/students/AddStudentModal';
 import { toast } from 'react-hot-toast';
+import LoadingScreen from '../../../components/common/LoadingScreen';
 
 const TeacherStudentDirectory = () => {
     const navigate = useNavigate();
@@ -31,7 +32,7 @@ const TeacherStudentDirectory = () => {
         return matchesSearch && matchesDomain;
     });
 
-    if (isLoading) return <div className="flex items-center justify-center min-h-[400px]">Loading students...</div>;
+    if (isLoading) return <LoadingScreen variant="contained" text="Loading students..." />;
     if (error) return (
         <div className="text-red-500 text-center py-10">
             <p className="text-lg font-bold">Error loading students</p>

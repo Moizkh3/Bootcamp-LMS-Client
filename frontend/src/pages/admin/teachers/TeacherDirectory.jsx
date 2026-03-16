@@ -14,9 +14,10 @@ import TeacherFilters from './TeacherFilters';
 import AddTeacherModal from './AddTeacherModal';
 import EditTeacherModal from './EditTeacherModal';
 import DeleteConfirmationModal from '../../../components/common/DeleteConfirmationModal';
-import Button from '../../../components/common/Button';
 import TeacherAssignmentsPanel from './TeacherAssignmentsPanel';
 import ResetPasswordModal from '../../../components/common/ResetPasswordModal';
+import LoadingScreen from '../../../components/common/LoadingScreen';
+import Button from '../../../components/common/Button';
 
 const TeacherDirectory = () => {
     const navigate = useNavigate();
@@ -97,7 +98,7 @@ const TeacherDirectory = () => {
         navigate(`/teachers/${teacher._id}`);
     };
 
-    if (isLoading) return <div className="flex items-center justify-center min-h-[400px]">Loading teachers...</div>;
+    if (isLoading) return <LoadingScreen variant="contained" text="Loading teachers..." />;
     if (error) return <div className="text-red-500 text-center py-10">Error loading teachers: {error?.data?.message || error.message}</div>;
 
     return (

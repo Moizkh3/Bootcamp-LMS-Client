@@ -1,4 +1,5 @@
 import { ChevronRightIcon, RocketIcon, Zap, ClipboardList, BarChart3 } from "lucide-react";
+import LoadingScreen from "../../../components/common/LoadingScreen";
 import { Link, useNavigate } from "react-router-dom";
 import Breadcrumbs from "../../../components/common/Breadcrumbs";
 import StatCard from "../../../components/common/StatCard";
@@ -50,7 +51,7 @@ export default function StudentDashboard() {
   ];
 
   if (statsLoading) {
-    return <div className="p-8">Loading dashboard...</div>;
+    return <LoadingScreen variant="contained" text="Loading dashboard..." />;
   }
 
   return (
@@ -192,7 +193,7 @@ export default function StudentDashboard() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {assignmentsLoading ? (
-               <p className="text-sm text-[var(--color-text-muted)]">Loading assignments...</p>
+               <LoadingScreen variant="contained" text="Loading assignments..." />
             ) : nextAssignments.length > 0 ? (
               nextAssignments.map((item) => (
                 <div

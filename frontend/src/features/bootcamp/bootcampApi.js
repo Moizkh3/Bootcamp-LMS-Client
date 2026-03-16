@@ -1,13 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BASE_URL } from '../../utils/constants';
+import { authApi } from '../auth/authServiceApi';
 
-export const bootcampApi = createApi({
-    reducerPath: 'bootcampApi',
-    baseQuery: fetchBaseQuery({
-        baseUrl: BASE_URL,
-        credentials: 'include',
-    }),
-    tagTypes: ['Bootcamp'],
+export const bootcampApi = authApi.injectEndpoints({
     endpoints: (builder) => ({
         // 1. Get All Bootcamps
         getAllBootcamps: builder.query({
@@ -25,7 +18,7 @@ export const bootcampApi = createApi({
                 method: 'POST',
                 body: newBootcamp,
             }),
-            invalidatesTags: ['Bootcamp'],
+            invalidatesTags: ['Bootcamp', 'Stats'],
         }),
 
         // 3. Edit Bootcamp

@@ -8,7 +8,7 @@ export const authApi = createApi({
         credentials: 'include',
     }),
 
-    tagTypes: ['Profile', 'Auth'],
+    tagTypes: ['Auth', 'Profile', 'User', 'Bootcamp', 'Domain', 'Assignment', 'Submission', 'Progress', 'Notification', 'Announcement', 'Stats'],
 
     endpoints: (builder) => ({
         // 1. Login
@@ -57,7 +57,7 @@ export const authApi = createApi({
                 method: 'POST',
                 body: userData,
             }),
-            invalidatesTags: ['Auth'],
+            invalidatesTags: ['Auth', 'User', 'Stats'],
         }),
 
         // 7. Logout
@@ -85,7 +85,7 @@ export const authApi = createApi({
                 method: 'POST',
                 body: formData,
             }),
-            invalidatesTags: ['Auth'],
+            invalidatesTags: ['Auth', 'User', 'Stats'],
         }),
     }),
 });

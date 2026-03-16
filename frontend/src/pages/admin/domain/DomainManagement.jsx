@@ -18,6 +18,7 @@ import {
 } from '../../../features/domain/domainApi';
 import { useGetAllBootcampsQuery } from '../../../features/bootcamp/bootcampApi';
 import { toast } from 'react-hot-toast';
+import LoadingScreen from '../../../components/common/LoadingScreen';
 import { useState } from 'react';
 
 
@@ -119,7 +120,7 @@ const DomainManagement = () => {
         navigate(`/domains/${domain._id}`);
     };
 
-    if (isLoading) return <div className="flex items-center justify-center min-h-[400px]">Loading domains...</div>;
+    if (isLoading) return <LoadingScreen variant="contained" text="Loading domains..." />;
     if (error) return <div className="text-red-500 text-center py-10">Error loading domains: {error?.data?.message || error.message}</div>;
 
     return (
